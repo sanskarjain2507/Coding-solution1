@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int profit=0; //profit stores the current profit
+        int minprice=INT_MAX; //min price stores the minimum price from 0th index to ith index
+        int s=prices.size();
+        
+        //we store min price because it is obvious that maxmum profit will be acheived if we buy at minimum price and sell at maximum price such that the maximum price is maximum of prices after that minprice index.And we also update the profit of if the case like [3,7,1,4] occur then at index 3 we calulate profit as max(profit=7-3 i.e, previous profit, and 4-1 that is profit based on current minprice) ,hence the answer is always correct.
+        for(int i=0;i<s;i++)
+        {
+            minprice=min(minprice,prices[i]);  //update min price
+            profit=max(profit,prices[i]-minprice); //calculate new profit 
+            
+        }
+        return profit;
+    }
+};
