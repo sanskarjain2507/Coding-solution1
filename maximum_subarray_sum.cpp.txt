@@ -1,0 +1,30 @@
+
+class Solution {
+public:
+   
+    int maxSubArray(vector<int>& nums) {
+        int s=nums.size(); //store the size of array
+        int maxm_sum=nums[0]; //initial maximum sum as the first element
+        int temp=maxm_sum; //temp stores sum of subarrays
+        for(int i=1;i<s;i++)
+        {
+            if(nums[i]+temp <nums[i]) //if by adding the ith element the subarray sum is less than the element then
+            {
+                temp=nums[i]; //start new sum from that element
+                maxm_sum=max(nums[i],maxm_sum); //choose maximum sum as max of previously find sum and current element
+            }
+            else
+            {
+                temp+=nums[i]; //else add that element to the temp subarray
+                maxm_sum=max(temp,maxm_sum); // and find new maxm_sum as max of temp subarray sum and previous maxm_sum
+            }
+        }
+        return maxm_sum;
+    }
+
+ 
+
+    
+};
+
+
