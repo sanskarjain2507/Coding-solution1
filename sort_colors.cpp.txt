@@ -1,0 +1,43 @@
+class Solution {
+public:
+    
+    void swap(vector<int> &nums,int i,int j)
+    {
+        int temp=nums[i];
+        nums[i]=nums[j];
+        nums[j]=temp;
+    }
+    
+    void sortColors(vector<int>& nums) {
+        
+        //for one pass we will use dutch national flag algorithm in which we use three pointers (low=i,mid=j,high=k) and at any point the element towards the left of j are less than 2 and the elments on the right of k are 2 and the elements to the left of i is 0
+        
+        int s=nums.size();
+        
+        //initialiaze all the pointers
+        int i=0;
+        int k=s-1;
+        int j=0;
+        
+        while(j<=k)
+        {
+            if(nums[j]==0) //if we found 0 we will swap low and mid pointers and then move both pointers 
+                //we move both pointers because we assured that element to the left of mid are less than 2 and so even after swaping it with low that condition is satisfied
+            {
+                swap(nums,i,j);
+                i++;
+                j++;
+            }
+            else if(nums[j]==1) //if nums[j]=1 then just move the mid as the proerty is already satisfied
+            {
+                j++;
+            }
+            else if(nums[j]==2) //if we found nums[j]=2 then swap it with high but do not move the mid pointer, and only decrement the high pointer.We do not move mid pointer because we are not sure about the right of mid there can be either 0,1,2 in high with which we swapped and so we first look that element in next iteration after swapping and then decide the action base don its valus 
+            {
+                swap(nums,j,k);
+                k--;
+            }
+        }
+     
+    }
+};
