@@ -1,0 +1,38 @@
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int s=nums.size();
+        vector<int> forward(s,0); //forward array stores the product of element of nums from 0th index till ith index
+        vector<int> backward(s,0); //backward array stores the product of elemnet of nums from s-1th index till ith index
+        int k=1;
+        
+        //calculate forward array
+        for(int i=0;i<s;i++)
+        {
+            k*=nums[i];
+            forward[i]=k;
+        }
+        
+        k=1;
+        
+        //calculate backward array
+        for(int i=s-1;i>-1;i--)
+        {
+            k*=nums[i];
+            backward[i]=k;
+        }
+        
+        vector<int> total(s,0); 
+        //total array stores the final multiplication as multipication of forward[i-1] and backward[i+1]
+        
+        total[0]=backward[1];   //intialize total[0] and total[s-1] to avoid error
+        total[s-1]=forward[s-2];
+        for(int i=1;i<s-1;i++)
+        {
+           
+            total[i]=forward[i-1]*backward[i+1];    
+        }
+        return total;
+            
+    }
+};
