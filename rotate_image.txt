@@ -1,0 +1,37 @@
+class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+    
+        int left=0;
+        int s=matrix.size();
+        int i=0;
+        int j=0;
+        int s1=s/2;
+     
+        while(s1--)
+        {
+            
+            i=left;
+            j=left;
+            left++;
+            
+            while(j<s-left)
+            {
+                
+                int temp1=matrix[j][s-i-1];   //save the right columns values one by one
+                matrix[j][s-i-1]=matrix[i][j]; //now swap the upper point with right coloumn 
+                int temp2=matrix[s-i-1][s-j-1]; //now save the bootom points
+                matrix[s-i-1][s-j-1]=temp1; //now swap the right and bottom point
+                temp1=matrix[s-j-1][i]; //now save the left point
+                matrix[s-j-1][i]=temp2; //now swap the left and bottom point
+                matrix[i][j]=temp1; //swpa the top and left point
+                j++;
+                
+            }
+            
+           
+            
+        }
+        
+    }
+};

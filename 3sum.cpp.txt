@@ -1,0 +1,63 @@
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        int s=nums.size();
+        
+        /* We first sort the array and then for each value of nums[i] we use two pointer approach for 
+        finding -nums[i] from i_1th index to s-1th index.
+        
+        once we find a number or didn't find the number we move j and k pointer until the adjacent 
+        values are different and j<k;*/
+        
+        set<vector<int>> s1;
+        sort(nums.begin(),nums.end());
+        int f=1;
+        {
+            for(int i=0;i<s;i++)
+            {
+                int j=i+1;
+                int k=s-1;
+                int target=-nums[i];
+                while(j<k)
+                {
+                    if(nums[j]+nums[k]<target)
+                    {
+                        j++;
+                        while(j<k && nums[j]==nums[j-1])
+                            j++;
+                    }
+                     else if(nums[j]+nums[k]>target)
+                    {
+                        k--;
+                        while(k>j && nums[k]==nums[k+1])
+                             k--;
+                    }
+                    else
+                    {
+                        vector<int> v;
+                        v.push_back(nums[i]);
+                        v.push_back(nums[j]);
+                        v.push_back(nums[k]);
+                        s1.insert(v);
+
+                       j++;
+                        while(j<k && nums[j]==nums[j-1])
+                            j++;
+                        
+                        k--;
+                        while(k>j && nums[k]==nums[k+1])
+                             k--;
+                    }
+                }
+            }
+            
+            vector<vector<int>> result;
+            for(auto i=s1.begin();i!=s1.end();i++)
+                result.push_back(*i);
+            return result;
+        }
+        
+        
+
+    }
+};

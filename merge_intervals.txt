@@ -1,0 +1,111 @@
+class Solution {
+public:
+    
+    
+    void heapify(vector<vector<int>> &v,int i,int s)
+    {
+        int left=i*2+1;
+        int right=i*2+2;
+        int maxm;
+        if(left<s && v[left][0]>v[i][0])
+        {
+            maxm=left;
+        }
+        else
+            maxm=i;
+        
+        if(right<s && v[right][0]>v[maxm][0])
+            maxm=right;
+        
+        if(i!=maxm)
+        {
+            int temp1=v[i][0];
+            int temp2=v[i][1];
+            v[i][0]=v[maxm][0];
+            v[i][1]=v[maxm][1];
+            v[maxm][0]=temp1;
+            v[maxm][1]=temp2;
+            heapify(v,maxm,s);
+            
+        }
+    }
+    
+    void buildheap(vector<vector<int>> &v)
+    {
+        int s=v.size();
+        
+        for(int i=s/2;i>-1;i--)
+            heapify(v,i,s);
+    }
+    
+    void heapsort(vector<vector<int>> &v)
+    {
+        buildheap(v);
+        int s=v.size();
+        
+        while(s--)
+        {
+            int temp1=v[0][0];
+            int temp2=v[0][1];
+            v[0][0]=v[s][0];
+            v[0][1]=v[s][1];
+            v[s][0]=temp1;
+            v[s][1]=temp2;
+            heapify(v,0,s);
+        }
+        
+    }
+    
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        
+        vector<vector<int>> result;
+        
+        int s=intervals.size();
+        heapsort(intervals);//first sort the intervals according to start index in increasing order
+        
+       
+        int start1=intervals[0][0];
+        int end1=intervals[0][1];
+        for(int i=1;i<s;i++)
+        {
+            int start2=intervals[i][0];
+            int end2=intervals[i][1];
+            
+            if(end1<start2) //if end1 is less than start2 then update start1 and end1 to next intervals 
+                            // and push the current start1 and end1 to result
+            {
+                vector<int> v;
+                v.push_back(start1);
+                v.push_back(end1);
+                result.push_back(v);
+                start1=start2;
+                end1=end2;
+            }
+            else  //else update end1
+            {
+                end1=max(end1,end2); //we use maxm because the intervals are sorted according to start 
+                //only and not by end so if case like (1,5)(1,4) occurs then new interval should be (1,5) not (1,4)
+            }
+        }
+        
+        int s1=result.size();
+        
+        if(s1==0 && s!=0)//now check if last interval is inserted on result or not
+        {                 //this is condition if all the intervals merges to single interval then s1==0
+            vector<int> v;
+            v.push_back(start1);
+            v.push_back(end1);
+            result.push_back(v);
+        }
+        else if(result[s1-1][1]!=intervals[s-1][1])//else if last interval is not inserted in result then insert it
+        {
+            vector<int> v;
+            v.push_back(start1);
+            v.push_back(end1);
+            result.push_back(v);
+        }
+        
+        return result;
+        
+    }
+};
