@@ -1,0 +1,30 @@
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        int k=nums1.size()-1;
+        int i=m-1;
+        int j=n-1;
+        
+        while(i>=0 && j>=0)  //while any one of the array is fully traversed do
+        {
+            if(nums1[i]>nums2[j]) //if element of num1 is greater then push it to num1[k] and decrement k and i
+            {
+                nums1[k]=nums1[i];
+                k--;
+                i--;
+             
+            }
+            else //else push nums2 eleemnt in nums1[k] and decrement k and j
+            {
+                nums1[k]=nums2[j];
+                k--;
+                j--;
+            }
+        }
+        
+        while(j>=0) //if element at nums2 are still left then add it to nums1
+        {
+            nums1[k--]=nums2[j--];
+        }
+    }
+};
