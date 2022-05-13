@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int maxArea(vector<int>& height) {
+        
+            /*
+            In this we take two pointer l,r placed at start and end of array and we first calculate the 
+            water that can be fed between these two pointers and store them in maxwater.
+            
+            Now we will move that pointer whoose height is less and we do this because if we move 
+            greater height pointer then no matter how high the next adjacent pointer is its area 
+            with the low height pointer will obviously will be less than the area it make with the 
+            previous pointer,HENCE WE MOVE POINTER WITH LESSER HEIGHT.
+            
+            for more clarification see video:-https://www.youtube.com/watch?v=aO9eAw1wKvE&t=274s
+            */                
+            int l=0;
+            int r=height.size()-1;
+            int maxwater=0;
+            while(l<r)
+            {
+                int k=min(height[l],height[r]);
+                maxwater=max(maxwater,k*(r-l));
+                
+                if(height[l]==k)
+                    l++;
+                else
+                    r--;
+            }
+            
+            return maxwater;
+    }
+};
