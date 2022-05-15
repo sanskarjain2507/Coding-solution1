@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int waysToSplitArray(vector<int>& nums) {
+        
+        //simple approach is just and sutract values at ith index while calulating rihgt and left 
+        //subarray sum and then compare them
+        int s=nums.size();
+        long long int rightarraysum=0;
+        long long int leftarraysum=0;
+        
+        int validsplit=0;
+        for(int i=0;i<s;i++)
+            rightarraysum+=nums[i];
+        s--;
+        for(int i=0;i<s;i++)
+        {
+            leftarraysum+=nums[i];
+            rightarraysum-=nums[i];
+            
+            if(leftarraysum>=rightarraysum)
+                validsplit++;
+        }
+        
+        return validsplit;
+        
+    }
+};
