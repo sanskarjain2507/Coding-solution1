@@ -1,0 +1,44 @@
+class Solution {
+public:
+    
+    long long power(int k,int m)
+    {
+        if(m==0)
+            return 1;
+        
+        if(m==1)
+            return k;
+        return k*(power(k,m-1));
+    }
+    int divisorSubstrings(int num, int k) {
+        
+        int temp=num;
+        int count=0;
+        long long p=power(10,k);
+        
+        int c=0;
+        
+        //find total digits in num
+        while(temp)
+        {
+            temp/=10;
+            c++;
+        }
+        temp=num;
+        
+        //while size of temp(which is equal to c)>=k
+        while(temp && c>=k)
+        {
+            int n1=temp%p;//find last k digits
+            
+            if(n1!=0 && (num%n1==0)) //if it is divisor then increment the count
+                count++;
+            temp/=10; //now strip off lat digit from temp
+            c--; //and decrease the length of k by 1
+            
+            
+        }
+        return count;
+        
+    }
+};
