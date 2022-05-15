@@ -1,0 +1,95 @@
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        
+        /*
+        In this algo we first sort the array and then store every two sum in hashmap with their index 
+        in as value and then we will find the element of target-nums[i]-nums[j] in hashmap and comapre 
+        their index with i and j and then push them in set.
+        
+        For more details see video:-https://www.youtube.com/watch?v=8ViERnSgPKs&t=521s
+        */
+        sort(nums.begin(),nums.end());
+        map<int,vector<vector<int>>> twosumvec;
+        int s=nums.size();
+        set<vector<int>> result;
+        for(int i=0;i<s;)
+        {
+            for(int j=i+1;j<s;)
+            {
+                int k=nums[i]+nums[j];
+                vector<int> temp;
+                temp.push_back(i);
+                temp.push_back(j);
+                if(twosumvec.find(k)!=twosumvec.end())
+                {
+                    twosumvec[k].push_back(temp);
+                }
+                else
+                {
+                    vector<vector<int>> temp1;
+                    temp1.push_back(temp);
+                    twosumvec[k]=temp1;
+                }
+                
+                while(j+1<s && nums[j+1]==nums[j])
+                    j++;
+                j++;
+
+            }
+             while(i+1<s && nums[i+1]==nums[i])
+                    i++;
+                i++;
+            
+        }
+        
+        for(int i=0;i<s;i++)
+        {
+            for(int j=i+1;j<s;j++)
+            {
+                int k=target-(nums[i]+nums[j]);
+                
+                if(twosumvec.find(k)!=twosumvec.end())
+                {
+                    vector<vector<int>> temp=twosumvec[k];
+                    
+                    for(int l=0;l<temp.size();l++)
+                    {
+                        cout<<temp[l][0]<<" "<<temp[l][1]<<" "<<i<<" "<<j<<" ";
+                        if((temp[l][0]!=i) && (temp[l][0]!=j) && (temp[l][1]!=i) && (temp[l][1]!=j))
+                        {
+                            cout<<"hi"<<" ";
+                            vector<int> temp1;
+
+                            temp1.push_back(nums[temp[l][0]]);
+                            temp1.push_back(nums[temp[l][1]]);
+                            temp1.push_back(nums[i]);
+                            temp1.push_back(nums[j]);
+
+                            sort(temp1.begin(),temp1.end());
+                            result.insert(temp1);
+                        }
+                    }
+                }
+                //  while(j+1<s && nums[j+1]==nums[j]) here we cannot use this loop as there may e 
+                //mutiple index with same value and we ae comparing index should not be same so if two 
+                //same value have different index then that would not be shown in answer and thats incorrect
+                //exmaple [2,2,2,2,2]
+                //       8
+                //     j++;
+                // j++;
+                
+            }
+            
+        }
+       
+        vector<vector<int>> res;
+        
+        for(auto i=result.begin();i!=result.end();i++)
+        {
+            res.push_back(*i);
+        }
+        return res;
+        
+    }
+};
