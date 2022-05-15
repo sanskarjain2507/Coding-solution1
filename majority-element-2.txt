@@ -1,0 +1,71 @@
+class Solution {
+public:
+    vector<int> majorityElement(vector<int>& nums) {
+        /*
+        In this the main intitution is same as that of maximum subarray-1 i.e, in the array the
+        if we cancel elements then at last those elements will be remaining that are appearing majority 
+        number of times.
+        
+        So we choose two elements and procees, if the elements are same as that of element appearing in 
+        the ith index then we increament the count for that element otherwise we decrement the count.
+        
+        if count reaches 0 then next element is iniliazized as new candidate if that element is not same 
+        as other candidate.
+        
+        Also in this there is no gurantee that majority element is present so we do a check at last that 
+        the elements which we found appears more than s/3 times or not.
+        
+        */
+        int element1=nums[0];
+        int element2=0;
+        
+        int count1=0;
+        int count2=0;
+        int s=nums.size();
+        for(int i=0;i<s;i++)
+        {
+            if(count1==0 && nums[i]!=element2)
+            {
+                element1=nums[i];
+                count1++;
+            }
+            else if(count2==0 && nums[i]!=element1)
+            {
+                element2=nums[i];
+                count2++;
+            }
+            else if(nums[i]==element1)
+                count1++;
+            else if(nums[i]==element2)
+                count2++;
+            else
+            {
+                count1--;
+                count2--;
+            }
+        // cout<<" "<<count1<<" "<<count2<<" "<<element1<<" "<<element2;    
+        }
+        
+        count1=0;
+        count2=0;
+        
+        for(int i=0;i<s;i++)
+        {
+            if(nums[i]==element1)
+                count1++;
+            else if(nums[i]==element2)
+                count2++;
+        }
+        
+        cout<<" "<<count1<<" "<<count2<<" "<<element1<<" "<<element2;
+        vector<int> result;
+        
+        if(count1>s/3)
+            result.push_back(element1);
+        
+        if(count2>s/3)
+            result.push_back(element2);
+        
+        return result;
+    }
+};
