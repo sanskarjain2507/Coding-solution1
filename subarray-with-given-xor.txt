@@ -1,0 +1,34 @@
+int Solution::solve(vector<int> &A, int B) {
+    int count=0;
+    map<int,int> m;
+    int s=A.size();
+    int prefixxor=0;
+    for(int i=0;i<s;i++)
+    {
+        prefixxor^=A[i];
+        // cout<<prefixxor<<" ";
+        int temp=prefixxor^B;
+
+        if(temp==0)
+            count++;
+        if(m.find(temp)==m.end())
+        {
+            // m[prefixxor]=1;
+             if(m.find(prefixxor)!=m.end())
+                m[prefixxor]+=1;
+            else
+                m[prefixxor]=1;
+        }
+        else
+        {
+            count+=m[temp];
+            if(m.find(prefixxor)!=m.end())
+                m[prefixxor]+=1;
+            else
+                m[prefixxor]=1;
+            
+            
+        }
+    }
+    return count;
+}
