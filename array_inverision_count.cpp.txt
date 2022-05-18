@@ -1,0 +1,69 @@
+#include <bits/stdc++.h>
+// long long inversions=0;
+void merge(long long *arr,int i,int mid,int j,long long &inversions)
+{
+	long long temp[j-i+1];
+	int k=0;
+	int mid1=mid;
+	int i1=i;
+	
+	while(i<mid && mid1<=j)
+	{
+		if(arr[i]<=arr[mid1])
+		{
+			temp[k++]=arr[i++];
+		}
+		else
+		{
+			temp[k++]=arr[mid1++];
+			inversions+=(mid-i);
+		}
+	}
+	
+	while(i<mid)
+	{
+		temp[k++]=arr[i++];
+	}
+	
+	while(mid1<=j)
+	{
+		temp[k++]=arr[mid1++];
+	}
+	k=0;
+	for(int k1=i1;k1<=j;k1++)
+	{
+		arr[k1]=temp[k++];
+	}
+	
+	
+}
+
+void mergesort(long long *arr,int i,int j,long long &inversions)
+{
+	if(i>=j)
+		return;
+	int mid=(i+j)/2;
+	
+	mergesort(arr,i,mid,inversions);
+	mergesort(arr,mid+1,j,inversions);
+	merge(arr,i,mid+1,j,inversions);
+	
+	
+}
+
+long long getInversions(long long *arr, int n){
+ /*
+ In this we count the total inversions using mergesort.The main trick in while
+ merging the two subarray are sorted so suppose two arrays are 
+ 2 3 and 1 4 5 so while mergigng we know 2<1 so all element in 1st array includng 2 
+ which are right of it must be greater than 1.so total inversion count will increased by 
+ (mid-i) where mid is pointing to leftmost index of 2nd array and i is the current position
+ of any element in array 1.
+ */
+	long long inversions=0;
+
+	mergesort(arr,0,n-1,inversions);
+	
+
+	return inversions;
+}
