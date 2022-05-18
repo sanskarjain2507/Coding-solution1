@@ -1,0 +1,113 @@
+class Solution {
+public:
+    
+    void merge(vector<int> &nums,int start,int mid,int end,int &reversepairs)
+    {
+        
+        /*
+        
+        in this we first apply merge sort and while merging first we calculate ceil of (1st array)/2 and then we calculate total inversion count.Now we normally merge the array
+        */
+        vector<int> temp1(end-start+1);
+        vector<int> temp11(end-start+1);
+        vector<int> temp2(end-start+1);
+        // vector<int> temp3(end-mid+1);
+        int k=0;
+        for(int i=start;i<=end;i++)
+        {
+            temp1[k++]=nums[i];
+            
+        }
+        
+        int i=0;
+        int m=mid-start;
+        int j=m;
+        int e=end-start;
+        
+        for(i=0;i<m;i++)
+        {
+            temp1[i]=ceil(temp1[i]/2.0);
+        }
+        
+        i=0;
+        k=0;
+        while(i<m && j<=e)
+        {
+            if(temp1[i]>temp1[j])
+            {
+                reversepairs+=(m-i);
+                j++;
+                k++;
+            }
+            else
+            {
+                i++;
+                k++;
+            }
+        }
+        
+//         while(i<m)
+//         {
+//             temp2[k++]=temp1[i++];
+//         }
+        
+//         while(j>=e)
+//         {
+//             temp2[k++]=temp1[j++];
+//         }
+        
+        i=start;
+        // m=mid;
+        j=mid;
+        k=0;
+        while(i<mid && j<=end)
+        {
+            if(nums[i]<=nums[j])
+                temp2[k++]=nums[i++];
+            else
+            {
+                temp2[k++]=nums[j++];
+                // reversepairs+=(mid-i);
+            }
+        }
+        
+        while(i<mid)
+        {
+            temp2[k++]=nums[i++];
+        }
+        
+        while(j<=end)
+        {
+            temp2[k++]=nums[j++];
+        }
+        k=0;
+        for(int i=start;i<=end;i++)
+        {
+            nums[i]=temp2[k++];
+        }
+        
+        
+    }
+    
+    void mergesort(vector<int>& nums,int start,int end,int &reversepairs)
+    {
+        if(start>=end)
+            return;
+        
+        int mid=(start+end)/2;
+        mergesort(nums,start,mid,reversepairs);
+        mergesort(nums,mid+1,end,reversepairs);
+        merge(nums,start,mid+1,end,reversepairs);
+    }
+        
+    
+    int reversePairs(vector<int>& nums) {
+        int reversepairs=0;
+        mergesort(nums,0,nums.size()-1,reversepairs);
+        
+        // for(int i=0;i<nums.size();i++)
+        //     cout<<nums[i]<<" ";
+        return reversepairs;
+    
+    }
+};
