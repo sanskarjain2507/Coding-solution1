@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int maxConsecutive(int bottom, int top, vector<int>& special) {
+        sort(special.begin(),special.end());//sort the special array
+        
+        int maxconsecutivefloor=special[0]-bottom;
+        // int maxconsecutivefloor=curmaxconsecutivefloor;
+        
+        int s=special.size();
+        //now find the maximum gap between elements of special array (also consider top and bottom floors)
+        for(int i=0;i<s-1;i++)
+        {
+            maxconsecutivefloor=max(special[i+1]-special[i]-1,maxconsecutivefloor);
+        }
+        maxconsecutivefloor=max(top-special[s-1],maxconsecutivefloor);
+        
+        return maxconsecutivefloor;
+    }
+};
