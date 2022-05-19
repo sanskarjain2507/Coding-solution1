@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int largestCombination(vector<int>& candidates) {
+        /* 
+        since ceil(log(10^7)) is 27 so max number in this array can be represented in 27 bits.
+        Now for each bit position find total ones in in that position for all the elements of canddiates
+        and return the maximum count for position having maximum 1s.
+        */
+        int s=candidates.size();
+        int count=0;
+        int ans=0;
+        for(int i=0;i<28;i++)
+        {
+            count=0;
+            for(int j=0;j<s;j++)
+            {
+                if(candidates[j]%2)
+                {
+                 
+                  count++;  
+                }
+                candidates[j]>>=1;
+            }
+            ans=max(ans,count);
+        }
+        return ans;
+        
+    }
+};
