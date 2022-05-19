@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        unordered_map<char,int> m;
+        int l=s.length();
+        
+        int maxcount=0;
+        
+        int left=0; //left points to the leftmost point in the string from which the string is unique
+      
+        
+        for(int i=0;i<l;i++)
+        {
+            if(m.find(s[i])==m.end()) //if s[i] is not yet found in the string then store the index of s[i] in map
+            {
+                m[s[i]]=i;
+               
+            }
+            else
+            {
+                if(m[s[i]]<left)  //else if m[s[i]]<left means that the current character has been found
+                          //somewhere in string but it is fount in left of l so in that case just update the index of s[i]
+                {
+                    m[s[i]]=i;
+                  
+                }
+                else  //else 
+                {
+                   
+                    maxcount=max(i-left,maxcount); //update the maxcout
+                    left=m[s[i]]+1; //update the left pointer
+                    m[s[i]]=i; //update index of m[s[i]]
+                }
+            }
+        }
+        
+        return max(l-left,maxcount);
+    }
+};
