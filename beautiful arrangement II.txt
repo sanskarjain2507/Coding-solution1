@@ -1,0 +1,33 @@
+class Solution {
+public:
+    vector<int> constructArray(int n, int k) {
+	/*
+	in this just detect the pattern by dry run and create the code.
+*/   
+     int k1=k;
+        vector<int> ans;
+        ans.push_back(1);
+        int f=0;
+        int i=1;
+        n--;
+
+        while(k1)
+        {
+            if(f==0)
+                ans.push_back(ans[i-1]+k1);
+            else
+                ans.push_back(ans[i-1]-k1);
+            f=!f;
+            k1--;
+            n--;
+            i++;
+        }
+        i=2;
+        while(n--)
+        {
+            ans.push_back(k+i);
+            i++;
+        }
+        return ans;
+    }
+};
