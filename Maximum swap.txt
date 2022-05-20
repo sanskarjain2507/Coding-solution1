@@ -1,0 +1,117 @@
+/*
+ * @lc app=leetcode id=670 lang=cpp
+ *
+ * [670] Maximum Swap
+ *
+ * https://leetcode.com/problems/maximum-swap/description/
+ *
+ * algorithms
+ * Medium (47.11%)
+ * Likes:    2499
+ * Dislikes: 144
+ * Total Accepted:    169.7K
+ * Total Submissions: 356.5K
+ * Testcase Example:  '2736'
+ *
+ * You are given an integer num. You can swap two digits at most once to get
+ * the maximum valued number.
+ * 
+ * Return the maximum valued number you can get.
+ * 
+ * 
+ * Example 1:
+ * 
+ * 
+ * Input: num = 2736
+ * Output: 7236
+ * Explanation: Swap the number 2 and the number 7.
+ * 
+ * 
+ * Example 2:
+ * 
+ * 
+ * Input: num = 9973
+ * Output: 9973
+ * Explanation: No swap.
+ * 
+ * 
+ * 
+ * Constraints:
+ * 
+ * 
+ * 0 <= num <= 10^8
+ * 
+ * 
+ */
+
+// @lc code=start
+class Solution {
+public:
+    int maximumSwap(int num) {
+        vector<int> temp;
+
+        if(num>=0 && num<=10)
+            return num;
+        int s=0;
+        //Store reverse of num(digit by digit) in temp(you can also store num exactly)
+        while(num)
+        {
+            temp.push_back(num%10);
+            num/=10;
+            s++;
+        }
+
+        int f=0;
+
+        //now even though it seems to be three for loops but the
+        // complexity is O(n) where n is size of nums.
+        //This is because there are only 10 digit so in worst case the 
+        //outer loop will run only 10 times beacuse in 11th time it will definately find 
+        //some digit greater that that ex:-
+        // 98765432101000... , in this at 10th iteration we found
+        // temp[i]=0 and temp[i+1]=1 and the largest digit to thr right of
+        // temo[i]=0 only so we found the digit and we can swap and terminate  
+        for(int i=s-1;i>0;i--)
+        {
+            for(int j=i-1;j>-1;j--)
+            {
+                if(temp[i]<temp[j])
+                {
+                    int temp1=j;
+                    while(j>-1)
+                    {
+                        if(temp[j]>=temp[temp1])
+                            temp1=j;
+                        j--;
+                    }
+                    int temp2=temp[i];
+                    temp[i]=temp[temp1];
+                    temp[temp1]=temp2;
+                    f=1;
+                    break;
+                }
+                while(j>0 && temp[j-1]==temp[j])
+                        j--;
+
+            }
+            if(f==1)
+                break;
+            while(i>0 && temp[i-1]==temp[i])
+                i--;
+        }
+
+        int ans=0;
+
+        for(int i=s-1;i>-1;i--)
+        {
+            ans=ans*10+temp[i];
+        }
+
+        return ans;
+
+        
+        
+    }
+};
+// @lc code=end
+
