@@ -1,0 +1,114 @@
+class Solution {
+public:
+    
+    void swap(vector<int> &stones,int i,int j)
+    {
+        int temp=stones[i];
+        stones[i]=stones[j];
+        stones[j]=temp;
+    }
+    
+    void heapify(vector<int> &stones,int i,int s)
+    {
+        int left=i*2+1;
+        int right=i*2+2;
+        
+        int maxm;
+        
+        if(left<s && stones[left]>stones[i])
+            maxm=left;
+        else
+            maxm=i;
+        
+        if(right<s && stones[right]>stones[maxm])
+            maxm=right;
+        
+        if(i!=maxm)
+        {
+            swap(stones,i,maxm);
+            heapify(stones,maxm,s);
+        }
+        
+    }
+    
+    void buildheap(vector<int> &stones,int s)
+    {
+        for(int i=s/2;i>-1;i--)
+            heapify(stones,i,s);
+    }
+    
+    
+    int parent(int i)
+    {
+        if(i%2==0)
+            return i/2-1;
+        else
+            return i/2;
+    }
+    
+    void insert(vector<int> &stones,int ele,int &s)
+    {
+        stones.push_back(ele);
+        
+        s+=1;
+                  
+        int i=s-1;
+        // cout<<i<<" "<<parent(i);
+        while(i>0 && stones[parent(i)]<stones[i])
+        {
+             
+            swap(stones,parent(i),i);
+             
+            i=parent(i);
+            // cout<<i<<" ";
+        }
+        
+    }
+    
+    int remove(vector<int> &stones,int &s)
+    {
+        int e=stones[0];
+        swap(stones,0,s-1);
+        
+        auto ptr=stones.end();
+        ptr--;
+        // if(s!=1)
+            stones.erase(ptr);
+        s--;
+        if(s!=0)
+            heapify(stones,0,s);
+        return e;
+    }
+    
+    int lastStoneWeight(vector<int>& stones) {
+        int s=stones.size();
+        buildheap(stones,s);
+        
+        //in this the main intution is building a heap and then 
+        //taking largest two elements and then breaking the stones and 
+        //then insert the leftover value into heap and repaeat the steps until only one or no stone is 
+        //left.
+        //This intutuion works becase if we choose the greatest two elements then the stone formed  
+        //after breaking can break any stone of less size so at last we get the minimum possible leftover stone.
+        
+       
+        while(s>1)
+        {
+            int e1=remove(stones,s);
+            int e2=remove(stones,s);
+            
+           
+            
+            if(e1!=e2)
+                insert(stones,e1-e2,s);
+          
+
+        }
+        
+        if(s==0)
+            return 0;
+        return stones[0];
+        
+        
+    }
+};
