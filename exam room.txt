@@ -1,0 +1,96 @@
+class ExamRoom {
+public:
+    // vector<int> seats;
+    set<int> seats;
+    //take orfered set
+    int total_occupied=0; //this will store total occupied seats
+    int total_seats; //this will strore total seats
+    ExamRoom(int n) {
+        total_seats=n;
+       
+    }
+    
+    int seat() {
+        int assigned_seat;
+
+        if(total_occupied==0)//if total occupied seats in 0 then assign seat 0
+        {
+            assigned_seat=0;
+           
+
+        }
+        else
+        {
+            int f1=0;
+            int f2=0;
+            int dist_from_begin,dist_from_end;
+            
+            auto itr=seats.begin();
+            int prev=*itr;
+            int f3=0;
+            int f4=0;
+            if(*itr!=0) //calculate distace of first occupied seat from seat 0
+            {
+                f3=1;
+                dist_from_begin=*itr;
+            }
+            itr=seats.end();
+            itr--;
+            if(*itr!=total_seats-1) //calculate distance of last occupied seat from n-1
+            {
+                f4=1;
+                dist_from_end=total_seats-1-*itr;
+            }
+
+            int next;
+            int dist=INT_MIN;
+            for(auto it=seats.begin();it!=seats.end();it++)//now find distance between adjacent seats
+            {
+                if(f2==0)
+                {
+                    it++;
+                    f2=1;
+                    if(it==seats.end())
+                        break;
+                }
+                
+                
+                next=*it;
+               
+                if(f1==1 && (dist<(next-prev)/2))//uodate max distance if it is greater than previously calculated distance
+                {
+                    dist=(next-prev)/2;
+                    assigned_seat=prev+dist;
+                }
+                else if(f1==0)
+                {
+                    dist=(next-prev)/2;
+                    f1=1;
+                    assigned_seat=prev+dist;
+                }
+                prev=next;
+                
+            }
+            // cout<<dist<<" "<<dist_from_begin<<" "<<dist_from_end<<" ";
+            if( f3 && dist_from_begin>=dist) //if distance from begining is greater than or equal to maxm distance then update distancw and assign seat 0 
+            {
+                dist=dist_from_begin;
+                assigned_seat=0;
+            }
+            if(f4 && dist_from_end>dist) //if distance from last is greater than maximum distance than assign last seat
+                assigned_seat=total_seats-1;;
+           
+        }
+         total_occupied++;
+         seats.insert(assigned_seat); //insert assigned seat into ordered set
+         return assigned_seat;
+
+        
+    }
+    
+    void leave(int p) {
+        total_occupied--;
+       
+        seats.erase(p);//remove seat p from ordered set
+    }
+};
