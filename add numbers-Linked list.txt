@@ -1,0 +1,173 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+      int carry=0;
+      ListNode* temp=l1;
+        
+      while(l1->next!=NULL && l2->next!=NULL) //while anyone of l1 and l2
+ //does not reaches to last digit just add them and also store the carry
+      {
+          int x=l1->val+l2->val+carry;
+          if(x<10)
+          {
+              l1->val=x;
+              carry=0;
+          }
+          else
+          {
+              carry=1;
+              l1->val=x-10;
+          }
+          l1=l1->next;
+          l2=l2->next;
+      }
+        
+      if(l1->next==NULL) //if l1 reaches to last node first
+      {
+          int x=l1->val+l2->val+carry; //then first add the last digit s and update l1
+          if(x<10)
+          {
+              l1->val=x;
+              carry=0;
+          }
+          else
+          {
+              carry=1;
+              l1->val=x-10;
+          }
+          
+          l1->next=l2->next; //now point last node of l1 to next node of l2
+          
+          if(l2->next==NULL) //now check if l2 also points to null
+          {
+              if(carry==1) //if carry is 1 then insert 1 in last of l1
+              {
+                  ListNode* l=new ListNode();
+                  l->val=1;
+                  l->next=NULL;
+                  l1->next=l;
+                  return temp;
+              }
+              else
+                  return temp;
+          }
+          l2=l2->next; //else update l2
+         
+          while(l2->next!=NULL && carry) //now until l2 reaches end of list or carry occurs update l2 and carry
+          {
+              int x=l2->val+carry;
+              if(x<10)
+              {
+                  l2->val=x;
+                  carry=0;
+              }
+              else
+              {
+                  l2->val=x-10;
+              }
+              l2=l2->next;
+          }
+          
+          if(carry==1) //now if carry==1 then update last digit of l2 and insert 1 at last if carry still exist
+          {
+              int x=l2->val+carry;
+              if(x<10)
+              {
+                  l2->val=x;
+                  carry=0;
+              }
+              else
+              {
+                  l2->val=x-10;
+              }
+              
+              if(carry==1)
+              {
+                  ListNode* l=new ListNode();
+                  l->val=1;
+                  l->next=NULL;
+                  l2->next=l;
+              }
+          }
+          return temp;
+          
+      }
+      
+      
+      if(l2->next==NULL) //now if l2 reaches last first then perform same thing with l2;
+      {
+          int x=l1->val+l2->val+carry;
+          if(x<10)
+          {
+              l1->val=x;
+              carry=0;
+          }
+          else
+          {
+              carry=1;
+              l1->val=x-10;
+          }
+          
+          
+          l1=l1->next;
+          while(l1->next!=NULL && carry)
+          {
+              int x=l1->val+carry;
+              if(x<10)
+              {
+                  l1->val=x;
+                  carry=0;
+              }
+              else
+              {
+                  l1->val=x-10;
+              }
+              l1=l1->next;
+          }
+              
+          if(l1->next==NULL)
+          {
+              if(carry==1)
+              {
+                  int x=l1->val+carry;
+                  if(x<10)
+                  {
+                      l1->val=x;
+                      carry=0;
+                  }
+                  else
+                  {
+                      l1->val=x-10;
+                  }
+                  
+                  if(carry)
+                  {
+                    ListNode* l=new ListNode();
+                    l->val=1;
+                    l->next=NULL;
+                    l1->next=l;
+                    
+                  }
+              }
+          }
+              
+          }
+          return temp;
+          
+      }
+      
+      
+      // return temp;
+    
+
+};
