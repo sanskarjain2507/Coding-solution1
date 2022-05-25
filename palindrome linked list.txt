@@ -1,0 +1,68 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    
+    ListNode* reverseList(ListNode* temp)
+    {
+        ListNode* temp1=temp;
+        if(temp1->next==NULL)
+            return temp;
+        ListNode* temp2,*temp3;
+        temp2=temp1->next;
+        temp1->next=NULL;
+        while(temp2!=NULL)
+        {
+            temp3=temp2->next;
+            temp2->next=temp1;
+            temp1=temp2;
+            temp2=temp3;
+        }
+        return temp1;
+    }
+    bool isPalindrome(ListNode* head) {
+        //reverse half linked list and check for eqivalence of the  two lists.
+        int totalNode=0;
+        ListNode* temp=head;
+        
+        while(temp!=NULL)
+        {
+            totalNode++;
+            temp=temp->next;
+        }
+        
+        int k=totalNode/2;
+        temp=head;
+        if(k==0)
+            return 1;
+        
+        while(k--)
+            temp=temp->next;
+         if(totalNode%2)
+            temp=temp->next;
+        temp=reverseList(temp);
+        
+       
+        
+        while(temp!=NULL)
+        {
+           
+            if(head->val!=temp->val)
+                return 0;
+            head=head->next;
+            temp=temp->next;
+        }
+        return 1;
+        
+        
+        
+    }
+};
