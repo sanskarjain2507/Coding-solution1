@@ -1,0 +1,111 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    
+    ListNode* reverseList(ListNode* head,int k)
+    {
+       ListNode *temp,*temp1,*temp2,*temp3;
+       temp=head;
+       temp3=NULL;
+       while(k)
+       {
+           if(temp!=NULL)
+             temp1=temp->next;
+           temp->next=temp3;
+           k--;
+           if(k==0)
+               return temp;
+           if(temp1!=NULL)
+           {
+            temp2=temp1->next;
+            temp1->next=temp;
+           }
+           k--;
+           if(k==0)
+               return temp1;
+           temp3=temp1;
+           temp=temp2;
+              
+       }
+       return temp1;
+       
+    }
+    
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        int totalNode=0;
+        ListNode* temp=head;
+        
+        while(temp!=NULL)
+        {
+            temp=temp->next;
+            totalNode++;
+        }
+        
+        if(head==NULL)
+            return NULL;
+        
+        int totalitr=totalNode/k; //totalitr stores total time we have to reverse sub list of k size
+        
+        if(totalitr==0)
+            return head;
+        temp=head;
+        ListNode* temp2,*temp3,*newhead,*temp4,*temp5;
+        
+        int f=k-1;
+        
+        while(f)
+        {
+            temp=temp->next;
+            f--;
+        }
+        
+        //new hea will be at kth position from start
+        newhead=temp;
+        temp=head;
+        f=0;
+        
+        temp2=temp; //store head of current in temp2 and it will be tail of reversed linked list
+            
+        int k1=k;
+        while(k1--) //now move your pointer to head of next sub-LL
+        {
+            temp=temp->next;
+        }
+        // ListNode* temp7=newhead->next;
+        temp3=reverseList(temp2,k);//now reverse the current sub-LL and get its head in temp3
+        
+
+        totalitr--; //reduce totalitr
+        
+        while(totalitr)
+        {
+            // f=1;   
+            temp4=temp; //store head of current in temp4 and it will be tail of reversed linked list
+            
+            int k1=k;
+            while(k1--) //now move your pointer to head of next sub-LL
+            {
+                temp=temp->next;
+            }
+            
+            temp5=reverseList(temp4,k);//now reverse the current sub-LL and get its head in temp3
+   
+            temp2->next=temp5;
+            temp2=temp4;
+            temp3=temp5;
+            totalitr--;
+            
+        }
+        temp2->next=temp;
+        return newhead;
+    }
+};
