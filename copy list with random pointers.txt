@@ -1,0 +1,94 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* random;
+    
+    Node(int _val) {
+        val = _val;
+        next = NULL;
+        random = NULL;
+    }
+};
+*/
+
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        
+        if(head==NULL)
+            return NULL;
+        
+        Node* temp=head;
+        int totalNodes=0;
+        
+        //find total nodes in LL
+        while(temp!=NULL)
+        {
+            totalNodes++;
+            temp=temp->next;
+        }
+        
+        Node* newhead=new Node(head->val);
+        
+        Node* temp1=newhead;
+        temp=head->next;
+        head->next=temp1;
+        temp1->next=temp;
+        
+        //Now insert nodes of new LL in between nodes of original list such that ith node of old list 
+        //points to ith node of new LL and ith node of new LL points to i+1th node of old list
+        while(temp!=NULL)
+        {
+            Node* temp2=new Node(temp->val);
+            temp1=temp->next;
+            temp->next=temp2;
+            temp2->next=temp1;
+            temp=temp1;
+        }
+        
+        
+        temp=head;
+        temp1=newhead;
+        
+        
+        //now assign random pointers as random of ith node in new LL is equal to next of random of ith node of old LL.
+        while(temp!=NULL)
+        {
+            if(temp->random==NULL)
+            {
+                temp1->random=NULL;
+            }
+            else
+            {
+                temp1->random=temp->random->next;
+            }
+            temp=temp->next->next;
+            
+            if(temp!=NULL)
+                temp1=temp1->next->next;
+        }
+        
+        temp=head;
+        temp1=newhead;
+        
+        //now again seperate old and new LL
+        while(temp!=NULL)
+        {
+            // cout<<"b";
+            temp->next=temp1->next;
+            temp=temp->next;
+            
+            if(temp!=NULL)
+                temp1->next=temp->next;
+            
+            if(temp1!=NULL)
+                temp1=temp1->next;
+        }
+        return newhead;
+        
+
+    }
+};
