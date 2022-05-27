@@ -1,0 +1,99 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    
+    //just merge list in pairs
+    ListNode* mergelist(ListNode* list1,ListNode* list2)
+    {
+        ListNode* temp,*temp1,*temp2,*temp3,*temp4;
+        
+        if(list1==NULL)
+            return list2;
+        
+        if(list2==NULL)
+            return list1;
+        
+        if(list1->val <=list2->val)
+        {
+            temp=list1;
+            temp1=list1;
+            temp2=list2;
+        }
+        else
+        {
+            temp=list2;
+            temp1=list2;
+            temp2=list1;
+        }
+        
+        
+        while(temp1->next!=NULL && temp2->next!=NULL)
+        {
+            temp3=temp1->next;
+            temp4=temp2->next;
+            if(temp1->val<=temp2->val && temp1->next->val>=temp2->val)
+            {
+                temp1->next=temp2;
+                temp2->next=temp3;
+                temp1=temp1->next;
+                temp2=temp4;
+            }
+            else
+                temp1=temp1->next;
+        }
+        
+        if(temp1->next==NULL)
+        {
+            temp1->next=temp2;
+            return temp;
+            
+        }
+        
+        if(temp2->next==NULL)
+        {
+            while(temp1->next!=NULL && temp1->val<=temp2->val && temp1->next->val<=temp2->val)
+                temp1=temp1->next;
+            
+            if(temp1->next==NULL)
+            {
+                temp1->next=temp2;
+                return temp;
+            }
+            
+            temp2->next=temp1->next;
+            temp1->next=temp2;
+            return temp;
+        }
+        return temp;
+            
+        
+    }
+    
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+     int s=lists.size();
+     
+        if(s==1)
+            return lists[0];
+        if(s==0)
+            return NULL;
+        
+        ListNode* list1=lists[0];
+        
+        for(int i=1;i<s;i++)
+        {
+            list1=mergelist(list1,lists[i]);
+            ListNode* l=list1;
+        }
+        return list1;
+        
+    }
+};
