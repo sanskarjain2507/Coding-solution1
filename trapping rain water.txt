@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        
+        int s=height.size();
+        
+        vector<int> rightmax(s,0); //ith element in this vector stores maximum height from ith coloumn to last coloumn in right
+        
+        rightmax[s-1]=height[s-1];
+        for(int i=s-2;i>-1;i--)
+        {
+            if(height[i]<rightmax[i+1])
+                rightmax[i]=rightmax[i+1];
+            else
+                rightmax[i]=height[i];
+        }
+        
+        int totalwater=0;
+        int leftmax=0; //this variable store maximum height in right upto ith point
+        leftmax=height[0];
+        for(int i=0;i<s;i++)
+        {
+            if(leftmax<height[i])
+                leftmax=height[i];
+            
+            totalwater=totalwater+min(leftmax,rightmax[i])-height[i];//find the water that can be holded in each height and then add it to totalwater
+        }
+        
+        return totalwater;
+        
+    }
+};
