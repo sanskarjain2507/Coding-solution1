@@ -1,0 +1,61 @@
+class Solution {
+public:
+    
+    
+    
+    void swap(vector<int> &nums,int i,int j)
+    {
+        int temp=nums[i];
+        nums[i]=nums[j];
+        nums[j]=temp;
+    }
+    
+    void heapify(vector<int> &nums,int i,int s)
+    {
+        int left=i*2+1;
+        int right=i*2+2;
+        
+        int maxm;
+        
+        if(left<s && nums[left]>nums[i])
+            maxm=left;
+        else
+            maxm=i;
+        
+        if(right<s && nums[right]>nums[maxm])
+            maxm=right;
+        
+        if(i!=maxm)
+        {
+            swap(nums,i,maxm);
+            heapify(nums,maxm,s);
+        }
+    }
+    void buildheap(vector<int> &nums,int s)
+    {
+         for(int i=s/2;i>-1;i--)
+            heapify(nums,i,s);
+    }
+
+    //delete element from heap and reduces its size    
+    int delete_from_heap(vector<int> &nums,int &s)
+    {
+        swap(nums,0,s-1);
+        int maxm_element=nums[s-1];
+        s--;
+        heapify(nums,0,s);
+        return maxm_element;
+    }
+    
+    int findKthLargest(vector<int>& nums, int k) {
+            int s=nums.size();
+            buildheap(nums,s); //build the maxheap
+        
+            while(--k) //now delete k-1 elements from the heap so that nums[0] willl contain kth largest element
+            {
+                delete_from_heap(nums,s);
+            }
+            return nums[0]; //return nums[0] which contain kth largest element
+            
+    }
+};
