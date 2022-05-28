@@ -1,0 +1,60 @@
+class Solution {
+public:
+    int minimumDeletions(vector<int>& nums) {
+        int s=nums.size();   
+        
+        if(s==1)
+            return 1;
+        
+        int minindex=0; //minindex will store the index of minimum element
+        int maxindex=0; //maxindex will store the index of maximum element
+        
+        int maxm=nums[0]; //initialize both maxm and minm to nums[0] which stores the maximum and 
+                          //minimum element respectively
+        int minm=nums[0];
+        
+        
+        //now find the maximum and minimum index from the array in single pass 
+        for(int i=0;i<s;i++)
+        {
+            if(nums[i]<minm)
+            {
+                minm=nums[i];
+                minindex=i;
+            }
+            if(nums[i]>maxm)
+            {
+                maxm=nums[i];
+                maxindex=i;
+            }
+        }
+        
+        if(minindex==maxindex) //if both minindex and maxindex are same then minimum deletion will be 
+                               //minimum of deletion required from start or from end of array
+        {
+            return min(s-minindex,minindex+1);
+        }
+        
+        /*
+        
+        if minindex is less than maxindex then minimum deletion required will be mimimum of the three cases:-
+        i)deletion upto maxindex from start of array
+        ii) deletion upto minindex from end of array
+        iii)deletion of mindex from start of array + deletion of maxindex from end of array
+        */
+        if(minindex<maxindex)  
+        {
+            return min(min(maxindex+1,s-minindex),minindex+1+s-maxindex);
+        }
+        
+        /*
+        now if maxindex is greater than mindex then minimum deletion required will be minimum among following three cases:-
+         i)deletion upto minindex from start of array
+        ii) deletion upto maxindex from end of array
+        iii)deletion of maxdex from start of array + deletion of minindex from end of array
+        
+        */
+        
+        return min(min(minindex+1,s-maxindex),maxindex+1+s-minindex);
+    }
+};
