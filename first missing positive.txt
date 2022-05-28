@@ -1,0 +1,88 @@
+class Solution {
+public:
+    
+    
+    void swap(vector<int> &nums,int i,int j)
+    {
+        int temp=nums[i];
+        nums[i]=nums[j];
+        nums[j]=temp;
+    }
+
+    
+    
+    int find_min_missing(vector<int> &nums,int i,int j)
+    {
+        int k=i;
+        
+        
+        //now if nums[i]-1>=i and nums[i]-1<=j and nums[nums[i]-1]>0 then multiply nums[nums[i]-1]by -1
+        //we do this so 
+        // i)ignore the index which are more than j and less than i
+        // ii)if any element is already made -ve by some other duplicate element then dont make it +ve again
+        
+        for(;i<=j;i++)
+        {
+            int n=nums[i];
+            if(n<0)
+                n=-n;
+            n--;
+            
+            if(n<=j && nums[n]>0)
+            {
+                nums[n]*=-1;
+            }
+            
+        }
+        
+        //now from left find the first positive number and that's number index+1 is our answer
+        for(i=k;i<=j;i++)
+        {
+            if(nums[i]>0)
+                return i+1;
+        }
+        
+        //if all the elements are negative then ans will be j+2
+        return j+2;
+    }
+    int firstMissingPositive(vector<int>& nums) {
+        
+        int s=nums.size();
+        int i=0;
+        int j=s-1;
+        
+        while(j>-1 && nums[j]<=0)
+            j--;
+        
+        //shift all the negative elements towards right and find the index of last positive element
+        while(i<j)
+        {
+            if(nums[i]>0)
+            {
+                i++;
+            }
+            else
+            {
+                swap(nums,i,j);
+                i++;
+                while(j>-1 && nums[j]<=0)
+                    j--;
+                
+            }
+        }
+        
+        if(j==-1) //it indicates array contains only elements<=0
+            return 1;
+        
+        if(j==0) //it indicates array contains only one element>0
+        {
+            if(nums[0]==1)
+                return 2;
+            return 1;
+        }
+        
+        return find_min_missing(nums,0,j);
+        
+       
+    }
+};
