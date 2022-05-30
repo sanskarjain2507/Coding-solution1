@@ -1,0 +1,46 @@
+class Solution {
+public:
+    
+    
+    int maxProduct(vector<string>& words) {
+    /*
+    I this question represent each string as an integer by setting bit corresponding to that letter as 1.
+    Now since english alphabets has 26 characters and int can store 32 bits so no overflow exist.
+    
+    Now check for every pairs if their and operation gives 0 then update maximum 
+    */    
+        int s=words.size();
+        vector<int> lengths(s,0);
+        vector<int> masks(s,0);
+        int maxm=0;
+        for(int i=0;i<s;i++)
+        {
+            lengths[i]=words[i].length();
+        }
+        
+        for(int i=0;i<s;i++)
+        {
+            int j=0;
+            while(words[i][j])
+            {
+                int x=1<<(words[i][j]-'a');
+                masks[i]|=x;
+                j++;
+            }
+        }
+        
+        for(int i=0;i<s;i++)
+        {
+            for(int j=i+1;j<s;j++)
+            {
+                if(!(masks[i]&masks[j]))
+                    maxm=max(lengths[i]*lengths[j],maxm);
+            }
+        }
+        return maxm;
+        
+
+        
+        
+    }
+};
