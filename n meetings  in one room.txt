@@ -1,0 +1,119 @@
+// { Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+class Solution
+{
+    public:
+    //Function to find the maximum number of meetings that can
+    //be performed in a meeting room.
+    
+    void swap(int start[],int end[],int i,int j)
+    {
+        int temp=start[i];
+        start[i]=start[j];
+        start[j]=temp;
+        temp=end[i];
+        end[i]=end[j];
+        end[j]=temp;
+    }
+    
+    void heapify(int start[],int end[],int i,int s)
+    {
+        int left=i*2+1;
+        int right=i*2+2;
+        
+        int maxm;
+        
+        if(left<s && start[i]<start[left])
+            maxm=left;
+        else
+            maxm=i;
+            
+        if(right<s && start[maxm]<start[right])
+            maxm=right;
+            
+        if(i!=maxm)
+        {
+            swap(start,end,i,maxm);
+            heapify(start,end,maxm,s);
+        }
+    }
+       
+    void buildheap(int start[],int end[],int s)
+    {
+        for(int i=s/2;i>=0;i--)
+            heapify(start,end,i,s);
+    }
+    
+    void heapsort(int start[],int end[],int s)
+    {
+        buildheap(start,end,s);
+        while(s--)
+        {
+            swap(start,end,0,s);
+            heapify(start,end,0,s);
+        }
+    }
+
+    int maxMeetings(int start[], int end[], int n)
+    {
+        
+        /*
+        steps:-
+            i)sort the meetings according to their starting index
+            ii)Now for two adcancent meetings check:-
+                a)if start time of 2nd meeting is greater than end time of first meeting then increment the meeting count.
+                b)if start time of 2ns meeting less than end time of 1st meeting then update the ending time to min(ending time of meeting 1,ending time of meeting 2).
+            
+        */
+        heapsort(start,end,n);
+        
+        // for(int i=0;i<n;i++)
+        //     cout<<start[i]<<" ";
+            
+        int start1=start[0];
+        int end1=end[0];
+        int c=1;
+        for(int i=1;i<n;i++)
+        {
+            if(start[i]>end1)
+            {
+                start1=start[i];
+                end1=end[i];
+                c+=1;
+            }
+            else if(start[i]<=end1)
+            {
+                if(end[i]<end1)
+                {
+                    start1=start[i];
+                    end1=end[i];
+                }
+            }
+            
+        }
+        return c;
+    }
+
+};
+
+// { Driver Code Starts.
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        int start[n], end[n];
+        for (int i = 0; i < n; i++) cin >> start[i];
+
+        for (int i = 0; i < n; i++) cin >> end[i];
+
+        Solution ob;
+        int ans = ob.maxMeetings(start, end, n);
+        cout << ans << endl;
+    }
+    return 0;
+}  // } Driver Code Ends
