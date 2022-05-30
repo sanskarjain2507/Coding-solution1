@@ -1,0 +1,146 @@
+// { Driver Code Starts
+// Program to find the maximum profit job sequence from a given array 
+// of jobs with deadlines and profits 
+#include<bits/stdc++.h>
+using namespace std; 
+
+// A structure to represent a job 
+struct Job 
+{ 
+    int id;	 // Job Id 
+    int dead; // Deadline of job 
+    int profit; // Profit if job is over before or on deadline 
+}; 
+
+
+ // } Driver Code Ends
+/*
+struct Job 
+{ 
+    int id;	 // Job Id 
+    int dead; // Deadline of job 
+    int profit; // Profit if job is over before or on deadline 
+};
+*/
+
+class Solution 
+{
+    public:
+    //Function to find the maximum profit and the number of jobs done.
+    
+    void swap(Job arr[],int i,int j)
+    {
+        Job temp;
+        temp.id=arr[i].id;
+        temp.dead=arr[i].dead;
+        temp.profit=arr[i].profit;
+        arr[i]=arr[j];
+        arr[j]=temp;
+    }
+    
+    void heapify(Job arr[],int i,int n)
+    {
+        int left=i*2+1;
+        int right=i*2+2;
+        int minm;
+        
+        if(left<n && arr[left].profit<arr[i].profit)
+            minm=left;
+        else
+            minm=i;
+        
+        if(right<n && arr[right].profit<arr[minm].profit)
+            minm=right;
+            
+        if(i!=minm)
+        {
+            swap(arr,i,minm);
+            heapify(arr,minm,n);
+        }
+    }
+    
+    void buildheap(Job arr[],int n)
+    {
+        for(int i=n/2;i>=0;i--)
+            heapify(arr,i,n);
+    }
+    
+    void heapsort(Job arr[],int n)
+    {
+        buildheap(arr,n);
+        
+        while(n--)
+        {
+            swap(arr,0,n);
+            heapify(arr,0,n);
+        }
+    }
+    
+    vector<int> JobScheduling(Job arr[], int n) 
+    { 
+        
+        heapsort(arr,n);
+        
+       
+        vector<int> ans;
+        int deadline[100]={0};
+        int profit=0;
+        int total_jobs=0;
+        for(int i=0;i<n;i++)
+        {
+            
+            int j=arr[i].dead;
+            while(j>0)
+            {
+                if(deadline[j-1]==0)
+                {
+                    
+                    deadline[j-1]=1;
+                    total_jobs+=1;
+                    profit+=arr[i].profit;
+                    break;
+                }
+                else
+                    j--;
+            }
+        }
+        ans.push_back(total_jobs);
+        ans.push_back(profit);
+        return ans;
+      
+    } 
+};
+
+// { Driver Code Starts.
+// Driver program to test methods 
+int main() 
+{ 
+    int t;
+    //testcases
+    cin >> t;
+    
+    while(t--){
+        int n;
+        
+        //size of array
+        cin >> n;
+        Job arr[n];
+        
+        //adding id, deadline, profit
+        for(int i = 0;i<n;i++){
+                int x, y, z;
+                cin >> x >> y >> z;
+                arr[i].id = x;
+                arr[i].dead = y;
+                arr[i].profit = z;
+        }
+        Solution ob;
+        //function call
+        vector<int> ans = ob.JobScheduling(arr, n);
+        cout<<ans[0]<<" "<<ans[1]<<endl;
+    }
+	return 0; 
+}
+
+
+  // } Driver Code Ends
