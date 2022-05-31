@@ -1,0 +1,19 @@
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        
+        //just go from last and update the last index which can be reached from last.At last if you can reach last from 0th index then return true else return false
+        int s=nums.size();
+        
+        int last=s-1;
+        for(int i=s-2;i>=0;i--)
+        {
+            if(i+nums[i]>=last)
+            {
+                last=i;
+            }
+        }
+        return !last;
+        
+    }
+};
