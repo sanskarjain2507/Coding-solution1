@@ -1,0 +1,60 @@
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        int s=gas.size();
+        vector<int> remaining_cost(s,0); //remaining cost stores the cost remaining at i+1th index after going from ith index as starting point
+        
+        int sum=0;
+        //first find the remaining costs of each location and also sum of remainig costs 
+        for(int i=0;i<s;i++)
+        {
+            remaining_cost[i]=gas[i]-cost[i];
+            sum+=remaining_cost[i];
+        }
+        
+        //if sum of remaining costs is less than zero means try from any index you cannot reach the same index o return -1
+        if(sum<0)
+            return -1;
+        
+        int k=0; //k store the fuel exhausted 
+        int start=0; //start stores the current starting position 
+        int f=1; //f tells us whether we need to update start or not
+        for(int i=0;i<s;i++)
+        {
+            k+=remaining_cost[i]; //add remainig_cost at ith index
+            if(k>0) //if k>0 means there is enough fuel to move forward
+            {
+                if(f==1) //now if we are in search of starting position then update start to i as k become +ve just at that index
+                {
+                    start=i; 
+                    f=0; //now make f=0 so that next time if k>0 then no need to update start
+                    k=remaining_cost[i]; //if i is start then we have to update the fuel that will be remaining after reaching i+1th index
+                }
+            }
+            else if(k<=0) //now if k<=0 at some point
+            {
+                if(remaining_cost[i]>0 && f==1) //if at ith index remaing_cost >0 and also we are in search of new starting position then update start,k and f
+                {
+                    start=i;
+                    k=remaining_cost[i];
+                    f=0;
+                }
+                else if(remaining_cost[i]==0 && f==0) //if remaining cost is 0 then we will reach start only if i=start-1, just handle that case for i=s-1 and for i=other indices
+                {
+                    if(i==s-1)
+                    {
+                        if(start==0)
+                            return 0;
+                    }
+                    else if(i==start-1)
+                    {
+                        return start;
+                    }
+                }
+                else //else update f as we need some other start fom where remianing_cost is +ve
+                    f=1;
+            }
+        }
+        return start;
+    }
+};
