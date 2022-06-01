@@ -1,5 +1,12 @@
 class Solution {
 public:
+
+/*
+suggesion:-
+
+just replace remianing_cost[i] by gas[i]-cost[i] for O(1) space and also calcuate
+ sum with finding the start position and at last if sum>=0 then return start otherwise return -1
+*/
     int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
         int s=gas.size();
         vector<int> remaining_cost(s,0); //remaining cost stores the cost remaining at i+1th index after going from ith index as starting point
