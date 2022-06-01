@@ -1,0 +1,66 @@
+class Solution {
+public:
+    bool isNStraightHand(vector<int>& hand, int groupSize) {
+        int s=hand.size();
+        sort(hand.begin(),hand.end());
+        if(s%groupSize)
+            return 0;
+        int t=s/groupSize;
+        if(groupSize==1)
+            return 1;
+        
+        map<int,int> freq;
+        
+        int minm=hand[0];
+        int j=0;
+        for(int i=0;i<s;i++)
+        {
+            if(freq.find(hand[i])!=freq.end())
+                    freq[hand[i]]+=1;
+            else
+                    freq[hand[i]]=1;
+        }
+        
+
+       
+        int next_group_start=minm;
+        int f=0;
+        
+        while(t--)
+        {
+            int c=next_group_start;
+            f=0;
+            for(int i=0;i<groupSize;i++)
+            {
+                if(freq.find(c)!=freq.end())
+                {
+                    if(freq[c]==0)
+                        return 0;
+                    freq[c]-=1;
+                    if(freq[c]!=0)
+                    {
+                        if(f==0)
+                        {
+                            
+                            next_group_start=c;
+                            f=1;
+                        }
+                    }
+                    c++;
+                }
+                else
+                    return 0;
+            }
+            if(f==0 && t)
+            {
+                while(hand[j]<c)
+                    j++;
+                next_group_start=hand[j];
+            }
+        }
+        return 1;
+        
+     
+        
+    }
+};
