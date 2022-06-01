@@ -1,0 +1,114 @@
+// { Driver Code Starts
+#include<bits/stdc++.h>
+using namespace std;
+
+
+ // } Driver Code Ends
+class Solution{
+public:
+    string chooseandswap(string a){
+        // Code Here
+        
+        /*
+        Just find the next largest alphabet lexiographically and check if the next found alphabets occurs
+        before the ith index, if it occurs then find another one otherwise swap the alphabets and return answer.
+        */
+        int l=a.length();
+        int i=0;
+        
+        char c1=a[0];
+        char c2=a[0];
+        int visited[26]={0};
+        while(i<l)
+        {
+           
+            visited[a[i]-'a']=1;
+            c1=a[i];
+            c2=a[i];
+            int j=i+1;
+            
+            int f=1;
+            while(j<l)
+            {
+                while(j<l)
+                {
+                 
+                    if(a[j]>=a[i])
+                        j++;
+                    else if(visited[a[j]-'a'])
+                        j++;
+                    else
+                        break;
+                }            
+                if(j<l)
+                {
+                    if(f==1)
+                    {
+                      
+                        c2=a[j];
+                        f=0;
+                    }
+                    else if(a[j]<c2)
+                    {
+                        c2=a[j];
+                    }
+                    j++;
+                }
+            }
+            if(c1!=c2)
+                break;
+            
+            while(1)
+            {
+                while(i+1<l && a[i]==a[i+1])
+                    i++;
+                
+                if(i<l && visited[a[i]-'a'])
+                    i++;
+                else
+                {
+                    
+                    break;
+                }
+            }
+            
+            
+        }
+        
+        if(c1==c2)
+            return a;
+        
+        i=0;
+        string ans="";
+        while(a[i])
+        {
+            if(a[i]==c1)
+                ans+=c2;
+            else if(a[i]==c2)
+                ans+=c1;
+            else
+                ans+=a[i];
+            i++;
+        }
+        return ans;
+    }
+    
+};
+
+
+// { Driver Code Starts.
+
+int main()
+{
+    Solution obj;
+	int t;
+	cin >> t;
+	while(t--)
+	{	
+	    string a;
+		cin >> a;
+		cout << obj.chooseandswap(a) << endl;
+	}
+	return 0;
+}
+  // } Driver Code Ends
