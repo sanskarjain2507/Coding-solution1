@@ -1,0 +1,64 @@
+// { Driver Code Starts
+#include<bits/stdc++.h> 
+using namespace std; 
+
+ // } Driver Code Ends
+class Solution
+{
+public:
+    vector<int> candyStore(int candies[], int N, int K)
+    {
+        sort(candies,candies+N);
+        
+        vector<int> ans;
+        int i=0;
+        int j=N-1;
+        int minm=0;
+        //for finidng the minm buy minm prices candies and take maximum prices candies for free until all the candies are with you
+        while(i<=j)
+        {
+            minm+=candies[i];
+            j-=K;
+            i++;
+        }
+        ans.push_back(minm);
+        
+        int maxm=0;
+        
+        i=N-1;
+        j=0;
+        
+        //for finding the maximum price take all the minimum candies for free and buy all the maximum prices candies until you have all of them
+        while(i>=j)
+        {
+            maxm+=candies[i];
+            j+=K;
+            i--;
+        }
+        ans.push_back(maxm);
+        return ans;
+    }
+};
+
+// { Driver Code Starts.
+int main()
+{
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        int N, K;
+        cin >> N >> K;
+        int candies[N];
+
+        for (int i = 0; i < N; i++)
+        {
+            cin >> candies[i];
+        }
+
+        Solution ob;
+        vector<int> cost = ob.candyStore(candies, N, K);
+        cout << cost[0] << " " << cost[1] << endl;
+    }
+    return 0;
+}  // } Driver Code Ends
