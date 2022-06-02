@@ -1,0 +1,178 @@
+class Solution {
+public:
+    
+    void swap(vector<vector<int>> &triplets,int i,int j)
+    {
+        int temp1=triplets[i][0];
+        int temp2=triplets[i][1];
+        int temp3=triplets[i][2];
+        
+        triplets[i][0]=triplets[j][0];
+        triplets[i][1]=triplets[j][1];
+        triplets[i][2]=triplets[j][2];
+        
+        triplets[j][0]=temp1;
+        triplets[j][1]=temp2;
+        triplets[j][2]=temp3;
+    }
+    
+    void heapify(vector<vector<int>> &triplets,int i,int s)
+    {
+        int left=i*2+1;
+        int right=i*2+2;
+        
+        int maxm;
+        
+        if(left<s)
+        {
+            if(triplets[left][0]>triplets[i][0])
+            {
+                maxm=left;
+            }
+            else if(triplets[i][0]==triplets[left][0])
+            {
+                if(triplets[left][1]>triplets[i][1])
+                    maxm=left;
+                else if(triplets[left][1]==triplets[i][1])
+                {
+                    if(triplets[left][2]>triplets[i][2])
+                        maxm=left;
+                    else
+                        maxm=i;
+                }
+                else
+                    maxm=i;
+            }
+            else
+                maxm=i;
+        
+        }
+        else
+            maxm=i;
+        
+        if(right<s)
+        {
+             
+            if(triplets[right][0]>triplets[maxm][0])
+            {
+                maxm=right;
+            }
+            else if(triplets[maxm][0]==triplets[right][0])
+            {
+                if(triplets[right][1]>triplets[maxm][1])
+                    maxm=right;
+                else if(triplets[right][1]==triplets[maxm][1])
+                {
+                    if(triplets[right][2]>triplets[maxm][2])
+                        maxm=right;
+                }
+            }
+                
+       
+        }
+        
+        if(i!=maxm)
+        {
+            swap(triplets,i,maxm);
+            heapify(triplets,maxm,s);
+        }
+    }
+    
+    void buildheap(vector<vector<int>> &triplets,int s)
+    {
+        for(int i=s/2;i>=0;i--)
+            heapify(triplets,i,s);
+    }
+    
+    void heapsort(vector<vector<int>> &triplets,int s)
+    {
+        buildheap(triplets,s);
+        while(s--)
+        {
+            swap(triplets,0,s);
+            heapify(triplets,0,s);
+        }
+    }
+    
+    bool mergeTriplets(vector<vector<int>>& triplets, vector<int>& target) {
+        
+        int s=triplets.size();
+        vector<int> temp(3,0);
+        
+        for(int i=0;i<s;i++)
+        {
+            if(triplets[i][0]<=target[0] && triplets[i][1]<=target[1] && triplets[i][2]<=target[2])
+            {
+                temp[0]=max(temp[0],triplets[i][0]);
+                temp[1]=max(temp[1],triplets[i][1]);
+                temp[2]=max(temp[2],triplets[i][2]);
+            }
+        }
+        
+        if(temp[0]==target[0] && temp[1]==target[1] && temp[2]==target[2])
+            return 1;
+        return 0;
+        
+        // int s=triplets.size();
+       
+        // int arr[3]={0};
+        
+//         for(int i=0;i<s;i++)
+//         {
+//             if(triplets[i][0]==target[0])
+//                 arr[0]=1;
+//             if(triplets[i][1]==target[1])
+//                 arr[1]=1;
+//             if(triplets[i][2]==target[2])
+//                 arr[2]=1;
+//         }
+        
+//         if(arr[0]==0 || arr[1]==0 || arr[2]==0)
+//             return 0;
+        
+//         heapsort(triplets,s);
+        
+//         // for(int i=0;i<s;i++)
+//         //     cout<<"["<<triplets[i][0]<<","<<triplets[i][1]<<","<<triplets[i][2]<<"],";
+        
+//         for(int i=0;i<s;i++)
+//         {
+//             if(triplets[i][0]==target[0])
+//             {
+               
+//                 if(triplets[i][1]<=target[1] && triplets[i][2]<=target[2])
+//                 {
+           
+//                     for(int j=0;j<=i;j++)
+//                     {
+//                         if(triplets[j][1]==target[1])
+//                         {
+//                             if(triplets[j][2]==target[2])
+//                                 return 1;
+//                             if(triplets[j][2]<target[2])
+//                             {
+//                                 for(int k=0;k<=i;k++)
+//                                 {
+//                                     if(triplets[k][2]==target[2])
+//                                     {
+//                                         if(triplets[k][1]<=target[1])
+//                                             return 1;
+//                                     }
+//                                 }
+//                             }
+
+//                         }
+//                     }
+//                 }
+//             }
+//             else if(triplets[i][0]>target[0])
+//                 return 0;
+            
+//         }
+//         return 0;
+        
+        
+        
+
+    }
+};
