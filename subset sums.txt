@@ -1,0 +1,64 @@
+// { Driver Code Starts
+#include<bits/stdc++.h> 
+using namespace std; 
+
+ // } Driver Code Ends
+class Solution
+{
+public:
+
+    void ss(vector<int> &arr,int s,int i,int N,vector<int> &ans)
+    {
+        if(i==N) //if we reach end of array then just add sum to answer and return
+        {
+            ans.push_back(s);
+            
+        }
+        else
+        {
+            
+                
+                ss(arr,s,i+1,N,ans); //does not include the ith index element and find the sum
+                ss(arr,s+arr[i],i+1,N,ans); //include the ith index element and find the sum
+               
+                
+        }
+    }
+    
+    vector<int> subsetSums(vector<int> arr, int N)
+    {
+        int s=0;
+        vector<int> ans;
+        
+       
+        ss(arr,s,1,N,ans); //does not include 0th index element and find the sum
+        ss(arr,s+arr[0],1,N,ans); //include 0th index element and find the sum
+        return ans;
+        
+        
+    }
+};
+
+// { Driver Code Starts.
+int main()
+{
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        int N;
+        cin>>N;
+        vector<int> arr(N);
+        for(int i = 0 ; i < N ; i++){
+            cin >> arr[i];
+        }
+        Solution ob;
+        vector<int> ans = ob.subsetSums(arr,N);
+        sort(ans.begin(),ans.end());
+        for(auto sum : ans){
+            cout<< sum<<" ";
+        }
+        cout<<endl;
+    }
+    return 0;
+}  // } Driver Code Ends
