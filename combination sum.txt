@@ -1,0 +1,47 @@
+class Solution {
+public:
+    
+    void cs(vector<int> &candidates,vector<int> &temp,int i,int target,int s,set<vector<int>> &ans,int sum)
+    {
+        if(sum==target)
+        {
+            ans.insert(temp);
+            return;
+        }
+        
+        if(sum>target || i==s)
+            return;
+        
+        temp.push_back(candidates[i]);
+        cs(candidates,temp,i,target,s,ans,sum+candidates[i]);
+        temp.pop_back();
+       
+        cs(candidates,temp,i+1,target,s,ans,sum);
+        
+    }
+    
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        sort(candidates.begin(),candidates.end());
+        
+        set<int> s1;
+        
+        set<vector<int>> ans;
+        vector<int> temp;
+        int s=candidates.size();
+        for(int i=0;i<s;i++)
+            s1.insert(candidates[i]);
+        
+        vector<int> candidate;
+       ;
+        for(auto i=s1.begin();i!=s1.end();i++)
+            candidate.push_back(*i);
+        
+        cs(candidate,temp,0,target,candidate.size(),ans,0);
+        vector<vector<int>> ans1;
+        
+        for(auto it=ans.begin();it!=ans.end();it++)
+            ans1.push_back(*it);
+        return ans1;
+        
+    }
+};
