@@ -1,0 +1,98 @@
+class Solution {
+public:
+    
+    bool parsed(string &expression,int start,int end)
+    {
+        if(expression[start]=='t')
+            return 1;
+        if(expression[start]=='f')
+            return 0;
+        
+        if(expression[start]=='!')
+        {
+            return !parsed(expression,start+2,end-1);
+        }
+        
+        if(expression[start]=='|')
+        {
+            bool ans=false;
+            if(expression[start+1]=='(')
+            {
+                int e1=start+1;
+                int s1=e1+1;
+                int para_count=0;
+                while(1)
+                {
+                    e1++;
+                    if(expression[e1]==',')
+                    {
+                          if(para_count==0)
+                          {
+                               ans=ans || parsed(expression,s1,e1);
+                               s1=e1+1;
+                          }
+                    }
+                    
+                    if(expression[e1]==')')
+                    {
+                        if(para_count==0)
+                        {
+                            ans=ans || parsed(expression,s1,e1);
+                            return ans;
+                        }
+                        else
+                            para_count-=1;
+                    }
+                  
+                    
+                    if(expression[e1]=='(')
+                        para_count+=1;
+                }
+            }
+        }
+        
+        if(expression[start]=='&')
+        {
+            bool ans=true;
+            if(expression[start+1]=='(')
+            {
+                int e1=start+1;
+                int s1=e1+1;
+                int para_count=0;
+                while(1)
+                {
+                    e1++;
+                    if(expression[e1]==',')
+                    {
+                          if(para_count==0)
+                          {
+                            ans=ans && parsed(expression,s1,e1);
+                            s1=e1+1;
+                          }
+                    }
+                    
+                    if(expression[e1]==')')
+                    {
+                        if(para_count==0)
+                        {
+                            ans=ans && parsed(expression,s1,e1);
+                            return ans;
+                        }
+                        else
+                            para_count-=1;
+                    }
+                  
+                    
+                    if(expression[e1]=='(')
+                        para_count+=1;
+                }
+            }
+        }
+        cout<<"h";
+        return 0;
+    }
+    
+    bool parseBoolExpr(string expression) {
+        return parsed(expression,0,expression.length());
+    }
+};
