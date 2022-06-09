@@ -1,0 +1,35 @@
+class Solution {
+public:
+    
+    void permute1(vector<int> &nums,vector<vector<int>> &ans,vector<int> temp,int s,vector<int> &choosen)
+    {
+        
+        for(int i=0;i<s;i++)
+        {
+            if(choosen[i]==0)
+            {
+                choosen[i]=1;
+                temp.push_back(nums[i]);
+                permute1(nums,ans,temp,s,choosen);
+                temp.pop_back();
+                choosen[i]=0;
+            }
+            if(i==s-1)
+            {
+                if(temp.size()==s)
+                     ans.push_back(temp);
+            }
+        }
+   
+    }
+    
+    vector<vector<int>> permute(vector<int>& nums) {
+        int s=nums.size();
+        vector<int> choosen(s,0);
+        vector<vector<int>> ans;
+        vector<int> temp;
+        
+        permute1(nums,ans,temp,s,choosen);
+        return ans;
+    }
+};
