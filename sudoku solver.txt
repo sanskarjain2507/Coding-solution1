@@ -1,0 +1,100 @@
+class Solution {
+public:
+    
+    int solved=0;
+    int canplace(vector<vector<char>> &board,int i,int j,char c)
+    {
+        for(int i1=0;i1<9;i1++)
+        {
+            if(i1!=j && board[i][i1]==c)
+                return 0;
+        }
+        
+        for(int j1=0;j1<9;j1++)
+        {
+            if(j1!=i && board[j1][j]==c)
+                return 0;
+        }
+        
+        int l1=(i/3)*3;
+        int l2=(j/3)*3;
+        
+        for(int i1=l1;i1<l1+3;i1++)
+        {
+            for(int j1=l2;j1<l2+3;j1++)
+            {
+                if(board[i1][j1]==c)
+                    return 0;
+            }
+        }
+        return 1;
+    }
+    
+    void solveSudoku(vector<vector<char>>& board,int i=0,int j=0) {
+        
+        // cout<<i<<" "<<j<<" \n";
+        if(solved)
+            return;
+//         if(i==9 || j==9)
+//             return;
+        
+        if(i<9 && j<9 && board[i][j]=='.')
+        {
+            char chs[]={'1','2','3','4','5','6','7','8','9'};
+            for(int k=0;k<9;k++)
+            {
+                if(canplace(board,i,j,chs[k]))
+                {
+                    board[i][j]=chs[k];
+                    if(j+1<9)
+                    {
+                        solveSudoku(board,i,j+1);
+                        if(solved==0)
+                            board[i][j]='.';
+                        else
+                            return;
+                    }
+                    else if(i+1<9)
+                    {
+                        solveSudoku(board,i+1,0);
+                        if(solved==0)
+                            board[i][j]='.';
+                        else
+                            return;
+                    }
+                    else
+                    {
+                        solved=1;
+                        return;
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        else if(i<9 && j+1<9)
+        {
+            while(j+1<9 && board[i][j+1]!='.')
+                j++;
+            if(j+1<9)
+                solveSudoku(board,i,j+1);
+            else
+            {
+                // while(i+1<9 && board[i+1][j]!='.')
+                //     i++;
+                // if(i+1<9)
+                    solveSudoku(board,i+1,0);
+            }
+        }
+        else if(i+1<9)
+        {
+            // while(i+1<9 && board[i+1][j]!='.')
+            //     i++;
+            // if(i+1<9)
+                solveSudoku(board,i+1,0);
+        }
+        else
+            solved=1;
+    }
+};
