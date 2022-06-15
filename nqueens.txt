@@ -1,0 +1,128 @@
+class Solution {
+public:
+    
+    
+    int canplace(vector<vector<char>> &ans,int i,int j,int n)
+    {
+        for(int i1=0;i1<n;i1++)
+        {
+            if(i1!=j)
+            {
+                if(ans[i][i1]=='Q')
+                    return 0;
+            }
+        }
+        
+        for(int i1=0;i1<n;i1++)
+        {
+            if(i1!=i)
+            {
+                if(ans[i1][j]=='Q')
+                    return 0;
+            }
+        }
+        
+        int i1=i-1;
+        int j1=j-1;
+        
+        while(i1>-1 && j1>-1)
+        {
+            if(ans[i1][j1]=='Q')
+                return 0;
+            i1--;
+            j1--;
+        }
+        i1=i+1;
+        j1=j-1;
+        
+        while(i1<n && j1>-1)
+        {
+            if(ans[i1][j1]=='Q')
+                return 0;
+            i1++;
+            j1--;
+        }
+        
+        i1=i-1;
+        j1=j+1;
+        while(i1>-1 && j1<n)
+        {
+            if(ans[i1][j1]=='Q')
+                return 0;
+            i1--;
+            j1++;
+        }
+        return 1;
+    }
+    
+    void nqueens(vector<vector<char>> &ans,int i ,int j,int &placed,int &foundsol,int n,vector<vector<string>> &ans1)
+    {
+        if(foundsol)
+            return;
+        
+        // for(int k=0;k<n;k++)
+        // {
+        //     for(int k1=0;k1<n;k1++)
+        //         cout<<ans[k][k1];
+        //     cout<<"\n";
+        // }
+        for(;j<n;j++)
+        {
+            if(foundsol)
+                return;
+            else
+            {
+                if(canplace(ans,i,j,n))
+                {
+                   ans[i][j]='Q';
+                   placed+=1;
+                   if(placed==n)
+                   {
+                       // foundsol=1;
+                       vector<string> v1;
+                       for(int i1=0;i1<n;i1++)
+                       {
+                           string s1="";
+                           for(int j1=0;j1<n;j1++)
+                               s1+=ans[i1][j1];
+                           v1.push_back(s1);
+                           
+                       }
+                       ans1.push_back(v1);
+                       placed--;
+                       ans[i][j]='.';
+                       
+                   }
+                   else
+                   {
+                       nqueens(ans,i+1,0,placed,foundsol,n,ans1);
+                       if(foundsol)
+                           return;
+                       else
+                       {
+                           ans[i][j]='.';
+                           placed--;
+                       }
+                   }
+                }
+            }
+        }
+    }
+    
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<char>> ans;
+         vector<vector<string>> ans1;
+        
+        for(int i=0;i<n;i++)
+        {
+            vector<char> v1(n,'.');
+            ans.push_back(v1);
+            
+        }
+        
+        int placed=0;
+        int foundsol=0;
+        nqueens(ans,0,0,placed,foundsol,n,ans1);
+        return ans1;
+    }
+};
