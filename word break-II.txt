@@ -1,0 +1,54 @@
+
+
+int isInDict(string s1,vector<string> &dictionary)
+{
+    int l=dictionary.size();
+    for(int i=0;i<l;i++)
+    {
+        if(s1==dictionary[i])
+            return 1;
+    }
+    return 0;
+}
+    
+
+void wb(string &s,vector<string> &dictionary,vector<string> &ans,int cur,int &l,vector<string> &temp)
+{
+//     cout<<cur;
+    if(cur==l)
+    {
+        if(temp.size())
+        {
+            string s2="";
+            for(int i=0;i<temp.size()-1;i++)
+            {
+                s2+=temp[i];
+                s2+=" ";
+            }
+            s2+=temp[temp.size()-1];
+            ans.push_back(s2);
+        }
+    }
+    for(int i=cur;i<l;i++)
+    {
+        string s1="";
+        for(int j=cur;j<=i;j++)
+            s1+=s[j];
+        if(isInDict(s1,dictionary))
+        {
+            temp.push_back(s1);
+            wb(s,dictionary,ans,i+1,l,temp);
+            temp.pop_back();
+        }
+    }
+}
+
+vector<string> wordBreak(string &s, vector<string> &dictionary)
+{
+    // Write your code here
+    vector<string> ans;
+    int l=s.length();
+    vector<string> temp;
+    wb(s,dictionary,ans,0,l,temp);
+    return ans;
+}
