@@ -1,0 +1,76 @@
+class Solution {
+public:
+    
+    void isthere(vector<vector<char>> &board,string &word,int cur,int i,int j,int &m,int &n,int &ex,vector<vector<int>> &visited,int &l)
+    {
+        if(ex)
+            return;
+        
+        if(word[cur]==board[i][j])
+        {
+          
+            if(cur+1==l)
+            {
+                ex=1;
+                return;
+            }
+            visited[i][j]=1;
+            if(i+1<m && visited[i+1][j]==0)
+                isthere(board,word,cur+1,i+1,j,m,n,ex,visited,l);
+          
+            
+            if(ex)
+                return;
+            
+        
+            if(i-1>-1 && visited[i-1][j]==0)
+                isthere(board,word,cur+1,i-1,j,m,n,ex,visited,l);
+       
+            
+            if(ex)
+                return;
+                
+      
+            if(j+1<n && visited[i][j+1]==0)
+                isthere(board,word,cur+1,i,j+1,m,n,ex,visited,l);
+         
+            if(ex)
+                return;
+            if(j-1>-1 && visited[i][j-1]==0)
+                isthere(board,word,cur+1,i,j-1,m,n,ex,visited,l);
+            visited[i][j]=0;
+            
+            if(ex)
+                return;
+        }
+
+
+    }
+    
+    bool exist(vector<vector<char>>& board, string word) {
+        vector<vector<int>> visited;
+        int m=board.size();
+        int n=board[0].size();
+        
+        for(int i=0;i<m;i++)
+        {
+            vector<int> v1(n,0);
+            visited.push_back(v1);
+        }
+        
+        int ex=0;
+        int l=word.length();
+        
+        for(int i=0;i<m;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                isthere(board,word,0,i,j,m,n,ex,visited,l);
+                if(ex)
+                 return 1;
+            }
+            
+        }
+        return ex;
+    }
+};
