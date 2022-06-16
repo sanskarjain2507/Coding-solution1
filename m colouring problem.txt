@@ -1,0 +1,79 @@
+// { Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+
+ // } Driver Code Ends
+// Function to determine if graph can be coloured with at most M colours such
+// that no two adjacent vertices of graph are coloured with same colour.
+
+int coloured=0;
+int cancolor(bool graph[101][101],int c,int i,int color[101],int n)
+{
+    
+        for(int j=0;j<n;j++)
+        {
+            if(graph[i][j] && color[j]==c)
+                return 0;
+        }
+          return 1;
+}
+
+
+
+void gpcol(bool graph[101][101],int color[],int i,int m,int n)
+{
+    for(int j=1;j<=m;j++)
+    {
+        if(cancolor(graph,j,i,color,n))
+        {
+            color[i]=j;
+            if(i+1==n)
+            {
+                coloured=1;
+                return;
+            }
+            gpcol(graph,color,i+1,m,n);
+            if(coloured)
+                return;
+            else
+                color[i]=0;
+        }
+        
+    }
+}
+
+bool graphColoring(bool graph[101][101], int m, int n) {
+    
+        int color[101]={0};
+        coloured=0;
+        
+        gpcol(graph,color,0,m,n);
+        return coloured;
+    
+}
+
+// { Driver Code Starts.
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m, e;
+        cin >> n >> m >> e;
+        int i;
+        bool graph[101][101];
+        for (i = 0; i < n; i++) {
+            memset(graph[i], 0, sizeof(graph[i]));
+        }
+        for (i = 0; i < e; i++) {
+            int a, b;
+            cin >> a >> b;
+            graph[a - 1][b - 1] = 1;
+            graph[b - 1][a - 1] = 1;
+        }
+        cout << graphColoring(graph, m, n) << endl;
+    }
+    return 0;
+}
+  // } Driver Code Ends
