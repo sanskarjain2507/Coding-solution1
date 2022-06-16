@@ -1,0 +1,55 @@
+class Solution {
+public:
+    
+    
+    void letcom(vector<string> &codes,string &s,vector<string> &ans,int i,int l,string &digits,int cur)
+    {
+        if(i==l)
+        {
+            ans.push_back(s);
+            return;
+        }
+        int l2=0;
+       
+         
+            l2=(codes[digits[i]-'0']).length();
+  
+            for(int j1=0;j1<l2;j1++)
+            {
+                s+=codes[digits[i]-'0'][j1];    
+                letcom(codes,s,ans,i+1,l,digits,cur);
+                s.pop_back();
+            }
+      
+        
+        
+        
+        
+    }
+    
+    vector<string> letterCombinations(string digits) {
+        
+        
+        vector<string> codes;
+        codes.push_back("");
+        codes.push_back("");
+        codes.push_back("abc");
+        codes.push_back("def");
+        codes.push_back("ghi");
+        codes.push_back("jkl");
+        codes.push_back("mno");
+        codes.push_back("pqrs");
+        codes.push_back("tuv");
+        codes.push_back("wxyz");
+        
+        vector<string> ans;
+        if(digits=="")
+            return ans;
+        int i=0;
+        int l=digits.length();
+
+        string s="";
+        letcom(codes,s,ans,i,l,digits,0);
+        return ans;
+    }
+};
