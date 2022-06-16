@@ -1,0 +1,29 @@
+class Solution {
+public:
+    
+    void ss(vector<int> &nums,vector<vector<int>> &ans,vector<int> &temp,int cur,int s)
+    {
+        
+        if(s==cur)
+        {
+            ans.push_back(temp);
+            return;
+        }
+        
+        ss(nums,ans,temp,cur+1,s);
+        temp.push_back(nums[cur]);
+        ss(nums,ans,temp,cur+1,s);
+        temp.pop_back();
+        
+    }
+    
+    vector<vector<int>> subsets(vector<int>& nums) {
+        
+        vector<vector<int>> ans;
+        vector<int> temp;
+        int cur=0;
+        int s=nums.size();
+        ss(nums,ans,temp,cur,s);
+        return ans;
+    }
+};
