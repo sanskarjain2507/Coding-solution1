@@ -1,0 +1,101 @@
+// { Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+
+ // } Driver Code Ends
+/*You are required to complete this method */
+
+class Solution{
+  public:
+    int found=0;
+    int sol=0;
+    void partition(int a[],int taken[],int n,int rem_sum,int i1)
+    {
+
+        if(rem_sum==0)
+        {
+           
+            found=1;
+            return;
+        }
+        else
+        {
+           
+                for(int i=i1;i<n;i++)
+                {
+                    if(!taken[i])
+                    {
+                        if(a[i]<=rem_sum)
+                        {
+                            taken[i]=1;
+                            partition(a,taken,n,rem_sum-a[i],i1+1);
+                            if(found==0)
+                                taken[i]=0;
+                            else
+                                return;
+                        }
+                    }
+                }
+            
+        }
+    }
+    
+    bool isKPartitionPossible(int a[], int n, int k)
+    {
+        sort(a,a+n, greater<int>());
+        int sum=0;
+        found=0;
+         for(int i=0;i<n;i++)
+            sum+=a[i];
+        if(sum%k)
+            return 0;
+        
+        int taken[n]={0};
+        
+        for(int i=0;i<n;i++)
+        {
+           
+            if(!taken[i])
+            {
+                found=0;
+                partition(a,taken,n,sum/k,i);
+            }   
+            if(found==0)
+            {
+                
+                return 0;
+                
+            }
+            
+        }
+        
+        for(int i=0;i<n;i++)
+        {
+            if(!taken[i])   
+                return 0;
+            
+        }   
+        return 1;
+    }
+};
+
+// { Driver Code Starts.
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--)
+    {
+    	int n;
+    	
+    	cin>>n;
+    	int a[n];
+    	for(int i=0;i<n;i++)
+    	cin>>a[i];
+    	int k;
+    	cin>>k;
+    	Solution obj;
+    	cout<<obj.isKPartitionPossible(a, n, k)<<endl;
+    }
+}  // } Driver Code Ends
