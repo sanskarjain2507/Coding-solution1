@@ -1,0 +1,75 @@
+// { Driver Code Starts
+#include<bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+class Solution
+{
+	public:
+	    
+	    void fps(string s,int l,vector<string> &ans,string &s1,int valid[])
+	    {
+	        if(s1.length()==l)
+	        {
+	            int s2=ans.size();
+	            int f=0;
+	            for(int i=0;i<s2;i++)
+	            {
+	                if(s1==ans[i])
+	               {
+	                   f=1;
+	                   break;
+	               }
+	            }
+	            if(f==0)
+	                ans.push_back(s1);
+	            return;
+	        }
+	        
+	        for(int i=0;i<l;i++)
+	        {
+	            if(!valid[i])
+	            {
+	                s1+=s[i];
+	                valid[i]=1;
+	                fps(s,l,ans,s1,valid);
+	                s1.pop_back();
+	                valid[i]=0;
+	            }
+	        }
+	    }
+	
+		vector<string>find_permutation(string S)
+		{
+		    int l=S.length();
+		    sort(S.begin(),S.end());
+		    vector<string> ans;
+		    string s1="";
+		    
+		    int valid[l]={0};
+		    fps(S,l,ans,s1,valid);
+		    return ans;
+		}
+};
+
+
+
+// { Driver Code Starts.
+int main(){
+    int t;
+    cin >> t;
+    while(t--)
+    {
+	    string S;
+	    cin >> S;
+	    Solution ob;
+	    vector<string> ans = ob.find_permutation(S);
+	    for(auto i: ans)
+	    {
+	    	cout<<i<<" ";
+	    }
+	    cout<<"\n";
+    }
+	return 0;
+}
+  // } Driver Code Ends
