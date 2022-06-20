@@ -1,0 +1,80 @@
+class Solution {
+public:
+    int canchange(string &s1,string &s2)
+    {
+        int l=s1.length();
+        int x=0;
+        while(l--)
+        {
+            if(s1[l]!=s2[l])
+                x++;
+        }
+        
+        if(x==1)
+            return 1;
+        else
+            return 0;
+    }
+    
+    void findlen(string beginWord,string endWord,int &l,int &mindist,vector<int> &visited,vector<string> &wordList,queue<string> &stk,queue<int> &dist1)
+    {
+            
+            
+            string s1=stk.front();
+            int d1=dist1.front();
+            stk.pop();
+            dist1.pop();
+            if(d1>mindist)
+                return;
+            if(s1==endWord)
+            {
+                mindist=min(mindist,d1);
+                return;
+            }
+        
+           
+            for(int i=0;i<l;i++)
+            {
+               
+                if(canchange(s1,wordList[i]))
+                {
+                    if(!visited[i])
+                    {
+                       
+                        visited[i]=1;
+                        stk.push(wordList[i]);
+                        dist1.push(d1+1);
+                        
+                    }
+                    
+                }
+            }
+         
+            
+            while(!stk.empty())
+            {
+              findlen(beginWord,endWord,l,mindist,visited,wordList,stk,dist1);
+            }
+            
+    }
+    
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        
+        //use the BFS to find the mindistance from start word to end word
+        if(beginWord==endWord)
+            return 0;
+        queue<string> stk;
+        queue<int> dist1;
+        dist1.push(1);
+        int l=wordList.size();
+        
+        vector<int> visited(l,0);
+        int mindist=1000;
+        stk.push(beginWord);
+        findlen(beginWord,endWord,l,mindist,visited,wordList,stk,dist1);
+        
+        if(mindist==1000)
+            return 0;
+        return mindist;
+    }
+};

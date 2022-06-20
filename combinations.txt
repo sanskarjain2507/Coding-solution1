@@ -1,0 +1,35 @@
+class Solution {
+public:
+    
+    void getcomb(vector<int> &nums,int &n,int &s,int &k,vector<vector<int>> &ans,vector<int> &temp,int i)
+    {
+        if(s==k)
+        {
+            ans.push_back(temp);
+            return;
+        }
+        
+        for(int i1=i;i1<n;i1++)
+        {
+            temp[s]=nums[i1];
+            s++;
+            getcomb(nums,n,s,k,ans,temp,i1+1);
+            s--;
+        }
+        
+    }
+    
+     vector<vector<int>> combine(int n, int k) {
+        vector<int> nums(n);
+        
+        for(int i=1;i<=n;i++)
+            nums[i-1]=i;
+        
+        vector<int> temp(k);
+        int s=0;
+        vector<vector<int>> ans;
+         int i=0;
+        getcomb(nums,n,s,k,ans,temp,i);
+        return ans;
+    } 
+};
