@@ -1,0 +1,52 @@
+// { Driver Code Starts
+#include<bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+class Solution{
+	public:
+	int NthRoot(int n, int m)
+	{
+	    double l=1,r=m+1,mid;
+	   // double mid=(l+r)/2.0;
+	    
+	    while((r-l)>0.000001)
+	    {
+	        mid=(l+r)/2.0;
+	        double k=pow(mid,n);
+	        if(k==m)
+	        {
+	            break;
+	        }
+	        else if(k>m)
+	        {
+	            r=mid;
+	        }
+	        else
+	            l=mid;
+	    }
+	    int m1=mid;
+	  
+	    if(pow(m1,n)==m)
+	        return m1;
+	   else if(pow(m1+1,n)==m)
+	        return m1+1;
+	   else
+	        return -1;
+	  
+	}  
+};
+
+// { Driver Code Starts.
+int main(){
+	int tc;
+	cin >> tc;
+	while(tc--){
+		int n, m;
+		cin >> n >> m;
+		Solution ob;
+		int ans = ob.NthRoot(n, m);
+		cout << ans << "\n";
+	}  
+	return 0;
+}  // } Driver Code Ends
