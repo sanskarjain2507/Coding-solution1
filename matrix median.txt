@@ -1,0 +1,73 @@
+
+
+int totallowinrow(vector<vector<int>> &A,int k,int left,int right,int i)
+{
+    if(left>right)
+        return left;
+    
+    int mid=(left+right)/2;
+    
+    if(A[i][mid]<=k)
+        return totallowinrow(A,k,mid+1,right,i);
+    else
+        return totallowinrow(A,k,left,mid-1,i);
+
+        
+}
+
+int totallow(vector<vector<int>> &A,int k,int rows,int cols)
+{
+    int total=0;
+    for(int i=0;i<rows;i++)
+    {
+        total+=totallowinrow(A,k,0,cols-1,i);
+    }
+    return total;
+}
+
+
+int Solution::findMedian(vector<vector<int> > &A) {
+   int rows=A.size();
+   int cols=A[0].size();
+   int elements=(rows*cols)/2+1;
+   
+   int low=A[0][0];
+   int high=A[0][cols-1];
+   
+   //first find the highest and lowest element in the matrix
+   for(int i=0;i<rows;i++)
+   {
+       if(A[i][0]<low)
+        low=A[i][0];
+        
+        if(high<A[i][cols-1])
+            high=A[i][cols-1];
+   }
+   
+   int mid=(low+high)/2;
+   
+   
+   while(low<=high)
+   {
+       mid=(low+high)/2; //first check for middle element
+       int x=totallow(A,mid,rows,cols); //find total elements <=mid
+       if(x>=elements) //if x>=elements then the number is toward the left of array
+            high=mid-1;
+        else         //else the number is towards the right of array
+            low=mid+1;
+       
+   }
+   return low; //now return low
+   
+   //now you may think that it might be possible that the low is not present in the array but that is
+   //not the case because we are checking for "<=" so suppose if mid=6 and median is also 6 then total elements
+   // <=6 will be atleast half so next time we make high=5 so mid=5 now total elements <=5 will be less than half of rows*cols
+   // so we return low.Now this case will happen everytime because m*n is odd.  
+   
+
+     
+           
+     
+           
+   
+}
