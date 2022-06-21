@@ -1,0 +1,48 @@
+class Solution {
+public:
+    
+    int fndsn(vector<int> &nums,int left,int right,int s)
+    {
+       
+        int mid=(left+right)/2;
+        
+        if(mid==left)
+        {
+            if(left>0 && nums[mid]!=nums[mid-1] && nums[mid]!=nums[mid+1])
+                return nums[mid];
+            else if(left==0)
+                if(nums[mid]!=nums[mid+1])
+                    return nums[mid];
+        }
+        
+        if(mid==right)
+        {
+             if(right<s-1 && nums[mid]!=nums[mid-1] && nums[mid]!=nums[mid+1])
+                return nums[mid];
+            else if(right==s-1)
+                if(nums[mid]!=nums[mid-1])
+                    return nums[mid];
+           
+        }
+        
+        if(nums[mid]!=nums[mid-1] && nums[mid]!=nums[mid+1])
+            return nums[mid];
+        
+        if(mid%2==1 && nums[mid]==nums[mid-1])
+            return fndsn(nums,mid+1,right,s);
+        else if(mid%2==1 && nums[mid]!=nums[mid-1])
+            return fndsn(nums,left,mid-1,s);
+        else if(mid%2==0 && nums[mid]==nums[mid-1])
+            return fndsn(nums,left,mid-1,s);
+        else
+            return fndsn(nums,mid+1,right,s);
+            
+    }
+    
+    int singleNonDuplicate(vector<int>& nums) {
+        
+        if(nums.size()==1)
+            return nums[0];
+        return fndsn(nums,0,nums.size()-1,nums.size());
+    }
+};
