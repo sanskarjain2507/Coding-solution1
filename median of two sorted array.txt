@@ -1,0 +1,162 @@
+class Solution {
+public:
+    
+    double findmed(vector<int> &nums1,vector<int> &nums2,int n1,int n2,int t)
+    {
+                int low1=0;
+                int high1=t-1;
+
+                 while(1)
+                 {
+                     int mid1=(low1+high1)/2;
+                     int mid2=t-mid1-1-1; //selct first t-(mid1+1) elemnts from nums2
+                     
+                     if(t==1) //if t==1 then just return minimum of 1st elements
+                         return min(nums1[0],nums2[0]);
+                     
+                     if(mid2>=n2) //if mid2>=n2 then change low1
+                     {
+                         low1=mid1+1;
+                         continue;
+                          
+                     }
+                     
+                     if(mid2==-1) //if mid2==-1 then return t-1th element of nums1
+                     {
+                        return nums1[t-1];
+                     }
+                     
+                     if(high1==-1) //if high1==-1 then return t-1th element of nums2
+                     {
+                         return nums2[t-1];
+                     }
+                     
+                     if(mid2+1==n2 && mid1+1==n1) //if mid2 and mid1 reaches last of arrays then return max of last elements of both the arrays
+                         return max(nums2[mid2],nums1[mid1]);
+                     
+                     if(mid2+1==n2) //if mid2+1==n2
+                     {
+                         if(nums2[mid2]>nums1[mid1+1]) //if array is not valid then shrink 1st array
+                         {
+                             low1=mid1+1;
+                             continue;
+                         }
+                         else //else return maxms
+                         {
+                             return max(nums1[mid1],nums2[mid2]);
+                         }
+                         
+                     }
+                     
+                     if(mid1+1==n1) //if nums1 is exhausting
+                     {
+                         if(nums1[mid1]<=nums2[mid2+1]) //if partition is valid then return 
+                             return(max(nums1[mid1],nums2[mid2]));
+                         else
+                         {
+                             high1=mid1-1; //else shrink nums1
+                             continue;
+                         }
+                     }
+                     
+                     if(nums1[mid1]<=nums2[mid2+1] && nums2[mid2]<=nums1[mid1+1]) //if partition is valid then return
+                     {
+                         return max(nums1[mid1],nums2[mid2]);
+                     }
+                     
+                     if(nums1[mid1]>nums2[mid2+1]) //if parttion is not valid then shrink
+                     {
+                         high1=mid1-1;
+                         continue;
+                     }
+                     
+                     if(nums2[mid2]>nums1[mid1+1])
+                     {
+                         low1=mid1+1;
+                         continue;
+                     }
+                    
+                 }
+        }
+    
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int n1=nums1.size();
+        int n2=nums2.size();
+        
+       
+        int n=n1+n2;
+        int t=-1;
+        int t1=-1,t2=-1;
+        if(n%2)
+            t=n/2+1;
+        else
+        {
+            t1=n/2;
+            t2=t1+1;
+        }
+        
+         if(n1==0)
+         {
+            if(n2==0)
+                return 0;
+            else
+            {
+                if(n2%2)
+                {
+                    return nums2[t-1];
+                }
+                else
+                {
+                    return (nums2[t1-1]+nums2[t2-1])/2.0;
+                }
+            }
+         }
+        
+         if(n2==0)
+         {
+            if(n1==0)
+                return 0;
+            else
+            {
+                if(n1%2)
+                {
+                    return nums1[t-1];
+                }
+                else
+                {
+                    return (nums1[t1-1]+nums1[t2-1])/2.0;
+                }
+            }
+         }
+        
+         if(n1>n2)
+         {
+             if(t!=-1) //if total elements are odd
+             {
+                 return findmed(nums1,nums2,n1,n2,t);
+             }
+             else
+             {
+                 double x1=findmed(nums1,nums2,n1,n2,t1);
+                 double x2=findmed(nums1,nums2,n1,n2,t2);
+                 return (x1+x2)/2;
+             }
+         }
+         else
+         {
+            if(t!=-1) 
+            {
+                return findmed(nums2,nums1,n2,n1,t);
+            }
+            else
+            {
+               
+                double x1=findmed(nums2,nums1,n2,n1,t1);
+                double x2=findmed(nums2,nums1,n2,n1,t2);
+                return (x1+x2)/2;
+            }
+         }
+        return 0;
+    }
+
+};

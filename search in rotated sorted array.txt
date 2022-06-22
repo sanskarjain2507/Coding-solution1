@@ -1,69 +1,107 @@
 class Solution {
 public:
     
-    int findpoint(vector<int> &nums,int left,int right,int s)
-    {
-        if(left>right)
-            return -1;
+//     int findpoint(vector<int> &nums,int left,int right,int s)
+//     {
+//         if(left>right)
+//             return -1;
             
-        int mid=(left+right)/2;
+//         int mid=(left+right)/2;
         
         
-        if(mid==left && nums[mid]>nums[mid+1])
-            return mid+1;
-        else if(mid==left && nums[mid]<nums[mid+1])
-            return -1;
+//         if(mid==left && nums[mid]>nums[mid+1])
+//             return mid+1;
+//         else if(mid==left && nums[mid]<nums[mid+1])
+//             return -1;
         
-        if(mid==right && nums[mid]<nums[mid-1])
-                return mid;
-        else if(mid==right && nums[mid]>nums[mid-1])
-                return -1;
+//         if(mid==right && nums[mid]<nums[mid-1])
+//                 return mid;
+//         else if(mid==right && nums[mid]>nums[mid-1])
+//                 return -1;
         
-        if(nums[mid]>nums[mid+1])
-            return mid+1;
+//         if(nums[mid]>nums[mid+1])
+//             return mid+1;
         
-        int l=findpoint(nums,left,mid,s);
-        int r=findpoint(nums,mid+1,right,s);
+//         int l=findpoint(nums,left,mid,s);
+//         int r=findpoint(nums,mid+1,right,s);
         
-        if(l!=-1)
-            return l;
-        return r;
-    }
+//         if(l!=-1)
+//             return l;
+//         return r;
+//     }
     
-    int binsrch(vector<int> &nums,int left,int right,int &target)
-    {
-        if(left>right)
-            return -1;
+//     int binsrch(vector<int> &nums,int left,int right,int &target)
+//     {
+//         if(left>right)
+//             return -1;
         
-        int mid=(left+right)/2;
+//         int mid=(left+right)/2;
         
-        if(nums[mid]==target)
-            return mid;
+//         if(nums[mid]==target)
+//             return mid;
         
-        if(nums[mid]<target)
-            return binsrch(nums,mid+1,right,target);
-        else
-            return binsrch(nums,left,mid-1,target);
-    }
+//         if(nums[mid]<target)
+//             return binsrch(nums,mid+1,right,target);
+//         else
+//             return binsrch(nums,left,mid-1,target);
+//     }
     
-    int search(vector<int>& nums, int target) {
-        int s=nums.size();
+//     int search(vector<int>& nums, int target) {
+//         int s=nums.size();
         
-        if(s==1)
-        {
-            if(nums[0]==target)
-                return 0;
-            else
-                return -1;
-        }
-        int rotationpoint=findpoint(nums,0,s-1,s);
+//         if(s==1)
+//         {
+//             if(nums[0]==target)
+//                 return 0;
+//             else
+//                 return -1;
+//         }
+//         int rotationpoint=findpoint(nums,0,s-1,s);
         
-        if(rotationpoint==-1)
-        {
-            return binsrch(nums,0,s-1,target);
-        }
-        else
-            return max(binsrch(nums,0,rotationpoint-1,target),binsrch(nums,rotationpoint,s-1,target));
+//         if(rotationpoint==-1)
+//         {
+//             return binsrch(nums,0,s-1,target);
+//         }
+//         else
+//             return max(binsrch(nums,0,rotationpoint-1,target),binsrch(nums,rotationpoint,s-1,target));
         
-    }
+//     }
+    //The above method takes O(n) time to find the rotation point
+    
+     int findtarget(vector<int> &nums,int left,int right,int &target)
+     {
+         
+         if(left>right)
+            return -1;
+         
+         int mid=(left+right)/2;
+         
+         if(nums[mid]==target)
+             return mid;
+         
+         if(nums[mid]>=nums[left])
+         {
+             if(nums[mid]>target && nums[left]<=target)
+                 return findtarget(nums,left,mid-1,target);
+             else
+                 return findtarget(nums,mid+1,right,target);
+         }
+         
+         if(nums[mid]<=nums[right])
+         {
+             if(nums[mid]<target && nums[right]>=target)
+                 return findtarget(nums,mid+1,right,target);
+             else
+                 return findtarget(nums,left,mid-1,target);
+         }
+         return mid;
+     }
+    
+     int search(vector<int>& nums, int target) {
+         
+         int s=nums.size();
+         
+         return findtarget(nums,0,s-1,target);
+     }
+
 };
