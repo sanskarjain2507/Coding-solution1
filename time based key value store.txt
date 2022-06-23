@@ -1,0 +1,76 @@
+class TimeMap {
+public:
+    unordered_map<string,vector<string>> m1;
+    unordered_map<string,vector<int>> m2;
+    unordered_map<string,int> m3;
+    TimeMap() {
+      
+        
+    }
+    
+    int findl(vector<int> &nums,int left,int right,int &target)
+    {
+        while(left<=right)
+        {
+            int mid=(left+right)>>1;
+            
+            if(nums[mid]==target)
+                return mid;
+            
+            if(nums[mid]>target)
+                right=mid-1;
+            else
+                left=mid+1;
+        }
+        return right;
+    }
+    
+    void set(string key, string value, int timestamp) {
+        
+        if(m1.find(key)!=m1.end())
+        {
+            // vector<int> temp=m2[key];
+            int s=m3[key];
+            
+            if(m1[key][s-1]==value)
+                return;
+            m1[key].push_back(value);
+            m2[key].push_back(timestamp);
+            m3[key]+=1;
+        }
+        else
+        {
+            
+           
+            vector<string> v1;
+            v1.push_back(value);
+            m1[key]=v1;
+            vector<int> v2;
+            v2.push_back(timestamp);
+            m2[key]=v2;
+            m3[key]=1;
+        }
+    }
+    
+    string get(string key, int timestamp) {
+        if(m1.find(key)==m1.end())
+            return "";
+        else
+        {
+            vector<int> temp=m2[key];
+            
+            if(temp[0]>timestamp)
+                return "";
+            int t=findl(temp,0,m3[key]-1,timestamp);
+            
+            return m1[key][t];
+        }
+    }
+};
+
+/**
+ * Your TimeMap object will be instantiated and called as such:
+ * TimeMap* obj = new TimeMap();
+ * obj->set(key,value,timestamp);
+ * string param_2 = obj->get(key,timestamp);
+ */
