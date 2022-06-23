@@ -1,0 +1,65 @@
+int Solution::books(vector<int> &A, int B) {
+    // int mx=INT_MAX;
+    int s=A.size();
+    // int k=ceil((double)s/B);
+    int low=A[0]; 
+    int high=0;
+    if(B>s)
+        return -1;
+    //if total students=s then lowest possible sum=minimum element of A
+    //if total students=1 then minimum posible sum=sum(A[i])
+    for(int i=0;i<s;i++)
+    {
+        if(low>A[i])
+            low=A[i];
+        high+=A[i];
+    }
+    //now we have lower and upper bound ie,we have search space and now we can apply binary search to validate the search space
+    
+    while(low<=high)
+    {
+        int mid=(low+high)/2;
+        
+        int c=1;
+        int sum=0;
+        int f=0;
+        
+        //first find total students that can be assigned with books pages<=mid and also if its valid assignment or not
+        for(int i=0;i<s;i++)
+        {
+            if(sum+A[i]<=mid)
+            {
+                sum+=A[i];
+            }
+            else
+            {
+                c+=1;
+                sum=A[i];
+                if(sum>mid)
+                {
+                    f=1;
+                    break;
+                }
+            }
+        }
+        // cout<<mid<<" "<<low<<" "<<high<<" "<<c<<" "; 
+        if(f==1) //if its invalid then update low
+            low=mid+1;
+        else if(c==B) //if c==B then try to search for minimum value of assignment is possible
+        {
+            high=mid-1;
+        }
+        else if(c<B)// if total students>B then update high
+        {
+            high=mid-1;
+        }
+        else if(c>B) //if total students<B then update low
+        {
+            low=mid+1;
+        }
+    }
+    return low;
+    
+    
+    
+}
