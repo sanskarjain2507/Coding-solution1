@@ -1,0 +1,45 @@
+int chessTournament(vector<int> positions , int n ,  int c){
+	// Write your code here
+    sort(positions.begin(),positions.end()); //first sort the positions
+  
+    int minfocus=positions[1]-positions[0]; 
+    int maxfocus=positions[n-1]-positions[0]; //find the maximum focus possible
+    //then find the minimum focus possible
+    for(int i=1;i<n;i++)
+    {
+        int k=positions[i]-positions[i-1];
+        if(k<minfocus)
+            minfocus=k;
+
+    }
+    int low=minfocus;
+    int high=maxfocus;
+    
+    //now use binary search to find the maximum focus by reducing the search space between low and high
+    while(low<=high)
+    {
+        int mid=(low+high)/2;
+        
+        int count=1;
+        int k=0;
+        for(int i=1;i<n;i++)
+        {
+             if(positions[i]-positions[k]>=mid)
+             {
+                 count+=1;
+                 k=i;
+             }
+        }
+        if(count>=c)
+        {
+            low=mid+1;
+        }
+        else
+        {
+            high=mid-1;
+        }
+        
+    }
+    return high;
+    
+}
