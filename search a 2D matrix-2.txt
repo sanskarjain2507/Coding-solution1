@@ -1,0 +1,62 @@
+class Solution {
+public:
+
+    
+    int findc(vector<int> &nums,int left,int right,int &target)
+    {
+        while(left<=right)
+        {
+            int mid=(left+right)>>1;
+            
+            if(nums[mid]<=target)
+                left=mid+1;
+            else
+                right=mid-1;
+        }
+       
+        return right;
+    }
+    
+    int findr(vector<vector<int>> &matrix,int top,int bottom,int &target)
+    {
+        while(top<=bottom)
+        {
+            int mid=(top+bottom)>>1;
+            
+            if(matrix[mid][0]<=target)
+                top=mid+1;
+            else
+                bottom=mid-1;
+            
+        }
+        return bottom;
+    }
+    
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        
+        int rows=matrix.size();
+        
+        
+        int cols=matrix[0].size();
+        int colmax=findc(matrix[0],0,cols-1,target); //find coloumn that contains just less than or equal to target
+    
+        
+        int rowmax=findr(matrix,0,rows-1,target); //similarly fin the row
+        
+        int i=0;
+        int j=colmax;
+        while(i<=rowmax && j>-1)
+        {
+            
+            if(matrix[i][j]==target)
+                return 1;
+            else if(matrix[i][j]<target) //if the target is greater than the matrix[i][j]th element than you may find the target in next row but the target is not available in that row
+                i++;
+            else //else see next smaller element in same row
+                j--;
+                
+        }
+       
+        return 0;
+    }
+};
