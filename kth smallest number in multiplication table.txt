@@ -1,0 +1,44 @@
+class Solution {
+public:
+    
+    int findl(int i,int n,int left,int right,int k)
+    {
+        while(left<=right)
+        {
+            int mid1=(left+right)>>1;
+            int mid=(mid1+1)*(i+1);
+            if(mid<=k)
+                left=mid1+1;
+            else
+                right=mid1-1;
+        }
+        return left;
+    }
+    
+    int findless(int m,int n,int k)
+    {
+        int total=0;
+        for(int i=0;i<m;i++)
+            total+=findl(i,n,0,n-1,k);
+        return total;
+    }
+    
+    int findKthNumber(int m, int n, int k) {
+        
+        int low=1;
+        int high=m*n;
+        
+        while(low<=high)
+        {
+            int mid=(low+high)>>1;
+            
+            int k1=findless(m,n,mid);
+            
+            if(k1<k)
+                low=mid+1;
+            else
+                high=mid-1;
+        }
+        return low;
+    }
+};
