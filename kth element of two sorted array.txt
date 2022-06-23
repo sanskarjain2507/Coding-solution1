@@ -1,0 +1,181 @@
+// { Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+
+ // } Driver Code Ends
+class Solution{
+    public:
+    
+    
+    int findl(int arr[],int n,int k,int left,int right)
+    {
+        if(left>right)
+            return left;
+        
+        int mid=(left+right)/2;
+        
+        if(arr[mid]>k)
+        {
+            return findl(arr,n,k,left,mid-1);
+        }
+        else
+        {
+            return findl(arr,n,k,mid+1,right);
+        }
+    }
+    
+    
+     int findm(int arr[],int n,int k,int left,int right)
+     {
+        if(left>right)
+            return left;
+        
+        int mid=(left+right)/2;
+        
+        if(arr[mid]>=k)
+        {
+            return findm(arr,n,k,left,mid-1);
+        }
+        else
+        {
+            return findm(arr,n,k,mid+1,right);
+        }
+     }
+     
+     //findless will find the total elements <=k in arr1 and arr2
+    int findless(int arr1[],int arr2[],int n,int m,int k)
+    {
+        int total=0;
+        total+=findl(arr1,n,k,0,n-1);
+        total+=findl(arr2,m,k,0,m-1);
+        return total;
+    }
+    
+    //findmore will find total elements >=k in arr1 and arr2
+    int findmore(int arr1[],int arr2[],int n,int m,int k)
+    {
+        int total=0;
+        total+=(n-findm(arr1,n,k,0,n-1));
+        total+=(m-findm(arr2,m,k,0,m-1));
+        return total;
+    }
+    
+    // int findequal()
+    
+    int findk(int arr1[],int arr2[],int n,int m,int k,int &low1,int &high1)
+    {
+        int low=0;
+        int high=n-1;
+        
+        while(low<=high) 
+        {
+            int mid=(low+high)/2;
+            
+            if(low1!=-1)//if we have the element which has <k elements smaller 
+            {
+                if(arr1[mid]<=low1) //and our query element is <= low1 then just skip that number
+                {
+                    low=mid+1;
+                    continue;
+                }
+            }
+            
+            if(high1!=-1) //if we have the element whch has  <k elemnts greater
+            {
+                if(arr1[mid]>=high1) //and our query element is >= high1 then just skip it
+                {
+                    high=mid-1;
+                    continue;
+                }
+            }
+            
+            int k1=findless(arr1,arr2,n,m,arr1[mid]); //find total elements <=a arr1[mid1];
+            int k2=findmore(arr1,arr2,n,m,arr1[mid]); //find total elements >= arr1[mid1]
+            int k3=(k1+k2-m-n); //find total elements==arr1[mid1]
+            
+           
+                k1=k1-k3; //find total elements < arr1[mid1]
+                k2=k2-k3; //find total elements > arr1[mid1]
+            
+            
+            if(k1<k && k2<(m+n-k+1) && (k1+k3)>=k && (k2+k3)>=(m+n-k+1))
+            {
+                return arr1[mid];
+            }
+            
+            k1+=k3;
+            k2+=k3;
+            if(k1<k)
+            {
+                if(low1==-1)
+                {
+                    low1=arr1[mid];
+                }
+                else
+                {
+                    if(arr1[mid]>low1)
+                        low1=arr1[mid];
+                }
+                low=mid+1;
+                
+                
+            }
+            
+            if(k2<(m+n-k+1))
+            {
+                if(high1==-1)
+                {
+                    high1=arr1[mid];
+                }
+                else
+                {
+                    if(arr1[mid]<high1)
+                        high1=arr1[mid];
+                        
+                }
+                high=mid-1;
+            }
+            
+            
+        }
+        return -1;
+    }
+    
+    int kthElement(int arr1[], int arr2[], int n, int m, int k)
+    {
+        int low1=-1;
+        int high1=-1;
+        
+        int k3=findk(arr1,arr2,n,m,k,low1,high1);//find in 1st array
+        // cout<<k3;
+        if(k3!=-1)
+            return k3;
+        
+        k3=findk(arr2,arr1,m,n,k,low1,high1); //find in 2nd array
+        return k3;
+ 
+    }
+};
+
+// { Driver Code Starts.
+ 
+// Driver code
+int main()
+{
+	int t;
+	cin>>t;
+	while(t--){
+		int n,m,k;
+		cin>>n>>m>>k;
+		int arr1[n],arr2[m];
+		for(int i=0;i<n;i++)
+			cin>>arr1[i];
+		for(int i=0;i<m;i++)
+			cin>>arr2[i];
+		
+		Solution ob;
+        cout << ob.kthElement(arr1, arr2, n, m, k)<<endl;
+	}
+    return 0;
+}  // } Driver Code Ends
