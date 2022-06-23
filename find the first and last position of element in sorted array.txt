@@ -1,0 +1,51 @@
+class Solution {
+public:
+    
+    
+    int findr(vector<int> &nums,int left,int right ,int &target,int &s)
+    {
+        while(left<=right)
+        {
+            int mid=(left+right)>>1;
+            
+            if(nums[mid]<=target)
+                left=mid+1;
+            else
+                right=mid-1;
+        }
+        
+        if(right==-1 || right==s)
+            return -1;
+        if(nums[right]!=target)
+            return -1;
+        return right;
+    }
+    int findl(vector<int> &nums,int left,int right,int &target,int &s)
+    {
+        while(left<=right)
+        {
+            int mid=(left+right)>>1;
+            
+            if(nums[mid]<target)
+                left=mid+1;
+            else
+                right=mid-1;
+        }
+        
+        if(left==-1 || left==s)
+            return -1;
+        if(nums[left]!=target)
+            return -1;
+        return left;
+    }
+    
+    vector<int> searchRange(vector<int>& nums, int target) {
+        vector<int> ans;
+        int s=nums.size();
+        int k1=findl(nums,0,s-1,target,s);
+        int k2=findr(nums,0,s-1,target,s);
+        ans.push_back(k1);
+        ans.push_back(k2);
+        return ans;
+    }
+};
