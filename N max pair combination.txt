@@ -1,0 +1,100 @@
+
+void swap(vector<int> &nums,int i,int j)
+{
+    int temp=nums[i];
+    nums[i]=nums[j];
+    nums[j]=temp;
+}
+
+void heapify(vector<int> &nums,int i,int s)
+{
+    int left=i*2+1;
+    int right=i*2+2;
+    
+    int minm;
+    
+    if(left<s && nums[left]<nums[i])
+        minm=left;
+    else
+        minm=i;
+    
+    if(right<s && nums[right]<nums[minm])
+        minm=right;
+        
+    if(i!=minm)
+    {
+        swap(nums,i,minm);
+        heapify(nums,minm,s);
+    }
+    
+}
+
+int deleteheap(vector<int> &nums,int &s)
+{
+    s--;
+    swap(nums,0,s);
+    heapify(nums,0,s);
+    int temp=nums[s];
+    nums.pop_back();
+    return temp;
+}
+
+int parent(int i)
+{
+    if(i%2)
+        return i/2;
+    else
+        return (i-1)/2;
+}
+
+void insert(vector<int> &nums,int &s,int k)
+{
+    nums.push_back(k);
+    int i=s;
+    s++;
+    while(parent(i)>-1 && k<nums[parent(i)])
+    {
+        swap(nums,i,parent(i));
+        i=parent(i);
+    }
+}
+
+vector<int> Solution::solve(vector<int> &A, vector<int> &B) {
+    
+    /*
+    Main intutuion is sort both the arrays in decreasing order and then insert the combinations to a heap 
+    and replace the element in minheap if it is greater than minimum element otherwise continue
+    */
+    int s=A.size();
+    int C=s;
+    sort(A.begin(),A.end(),greater<int>());
+    sort(B.begin(),B.end(),greater<int>());
+   
+    int s1=0;
+    vector<int> ans;
+    
+   
+    for(int i=0;i<s;i++)
+    {
+        for(int j=0;j<s;j++)
+        {   
+            if(s1<C)
+                insert(ans,s1,A[i]+B[j]);
+            else
+            {
+                if(ans[0]<(A[i]+B[j]))
+                {
+                    deleteheap(ans,s1);
+                    insert(ans,s1,A[i]+B[j]);
+                }
+                else
+                    break;
+            }
+            
+        }
+    }
+    
+    sort(ans.begin(),ans.end(),greater<int>());
+    return ans;
+       
+}
