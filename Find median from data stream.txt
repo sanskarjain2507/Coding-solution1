@@ -1,0 +1,187 @@
+class MedianFinder {
+public:
+    
+    void swap(vector<int> &nums,int i,int j)
+    {
+        int temp=nums[i];
+        nums[i]=nums[j];
+        nums[j]=temp;
+    }
+    
+    void heapifymin(vector<int> &nums,int i ,int s)
+    {
+        int left=i*2+1;
+        int right=i*2+2;
+        int minm;
+        
+        if(left<s && nums[left]<nums[i])
+                minm=left;
+        else
+            minm=i;
+        
+        if(right<s && nums[right]<nums[minm])
+                minm=right;
+        
+        if(minm!=i)
+        {
+            swap(nums,minm,i);
+            heapifymin(nums,minm,s);
+            
+        }
+    }
+    
+    void heapifymax(vector<int> &nums,int i ,int s)
+    {
+        int left=i*2+1;
+        int right=i*2+2;
+        int maxm;
+        
+        if(left<s && nums[left]>nums[i])
+                maxm=left;
+        else
+            maxm=i;
+        
+        if(right<s && nums[right]>nums[maxm])
+                maxm=right;
+        
+        if(maxm!=i)
+        {
+            swap(nums,maxm,i);
+            heapifymax(nums,maxm,s);
+            
+        }
+    }
+    
+    int parent(int i)
+    {
+        if(i%2)
+            return i/2;
+        else
+            return (i-1)/2;
+    }
+    
+    
+    void insertmax(vector<int> &nums,int key,int &s)
+    {
+        nums.push_back(key);
+        int i=s;
+        while(parent(i)>-1 && nums[i]>nums[parent(i)])
+        {
+            swap(nums,i,parent(i));
+            i=parent(i);
+        }
+        s++;
+        
+    }
+    
+    void insertmin(vector<int> &nums,int key,int &s)
+    {
+        nums.push_back(key);
+        int i=s;
+        while(parent(i)>-1 && nums[i]<nums[parent(i)])
+        {
+            swap(nums,i,parent(i));
+            i=parent(i);
+        }
+        s++;
+        
+    }
+    
+    int deletemax(vector<int> &nums,int &s)
+    {
+        s--;
+        int temp=nums[0];
+        swap(nums,0,s);
+        nums.pop_back();
+        heapifymax(nums,0,s);
+        return temp;
+    }
+    
+    int deletemin(vector<int> &nums,int &s)
+    {
+        s--;
+        int temp=nums[0];
+        
+        swap(nums,0,s);
+        nums.pop_back();
+        heapifymin(nums,0,s);
+        return temp;
+    }
+    
+    vector<int> maxarr;
+    vector<int> minarr;
+    int s1;
+    int s2;
+    //intution is take two heaps(one maxheap and one min heap and maintain that heaps such that the means will be the roots of that heap)
+    MedianFinder() {
+        s1=0;
+        s2=0;
+    }
+    
+    void addNum(int num) {
+        if(s1==0)
+        {
+            insertmax(maxarr,num,s1);
+        }
+        else if(s1==1 && s2==0)
+        {
+            if(maxarr[0]<num)
+                insertmin(minarr,num,s2);
+            else
+            {
+                int k=deletemax(maxarr,s1);
+                insertmin(minarr,k,s2);
+                insertmax(maxarr,num,s1);
+            }
+        }
+        else if(s1==s2 && maxarr[0]>=num)
+        {
+                insertmax(maxarr,num,s1);
+        }
+        else if(s1==s2 && maxarr[0]<num)
+        {
+            if(minarr[0]<num)
+            {
+                int k=deletemin(minarr,s2);
+                insertmax(maxarr,k,s1);
+                insertmin(minarr,num,s2);
+            }
+            else
+            {
+                insertmax(maxarr,num,s1);
+            }
+        }
+        else if(s1==s2+1 && maxarr[0]<num)
+        {
+             
+            insertmin(minarr,num,s2);
+        }
+        else if(s1==s2+1 && maxarr[0]>=num)
+        {
+            
+            int k=deletemax(maxarr,s1);
+            insertmin(minarr,k,s2);
+            insertmax(maxarr,num,s1);
+        }
+   
+    }
+    
+    double findMedian() {
+        int s=s1+s2;
+        if(s%2)
+        {
+               return maxarr[0];
+           
+        }
+           
+        else
+            return (maxarr[0]+minarr[0])/2.0;
+    }
+};
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder* obj = new MedianFinder();
+ * obj->addNum(num);
+ * double param_2 = obj->findMedian();
+ */
