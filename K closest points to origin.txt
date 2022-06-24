@@ -1,0 +1,81 @@
+class Solution {
+public:
+    
+    
+    void swap(vector<vector<int>>& points,vector<double> &dist,int i,int j)
+    {
+        vector<int> temp=points[i];
+        points[i]=points[j];
+        points[j]=temp;
+        double temp1=dist[i];
+        dist[i]=dist[j];
+        dist[j]=temp1;
+    }
+    
+    
+    void heapify(vector<vector<int>>& points,vector<double> &dist,int i,int s )
+    {
+        int left=i*2+1;
+        int right=i*2+2;
+        int maxm;
+        
+        if(left<s && dist[left]>dist[i])
+            maxm=left;
+        else
+            maxm=i;
+        
+        if(right<s && dist[right]>dist[maxm])
+            maxm=right;
+        
+        if(i!=maxm)
+        {
+            swap(points,dist,maxm,i);
+            heapify(points,dist,maxm,s);
+        }
+    }
+    
+    int parent(int i)
+    {
+        if(i%2)
+            return i/2;
+        return (i-1)/2;
+    }
+    void insert(vector<vector<int>> &points,vector<double> &dist,int &s,vector<int> key2,double key1)
+    {
+        dist.push_back(key1);
+        points.push_back(key2);
+        int i=s;
+        s++;
+        while(parent(i)>-1 && dist[i]>dist[parent(i)])
+        {
+            swap(points,dist,i,parent(i));
+            i=parent(i);
+        }
+    }
+    
+    void deleteheap(vector<vector<int>> &points,vector<double> &dist,int &s)
+    {
+        s--;
+        swap(points,dist,0,s);
+        points.pop_back();
+        dist.pop_back();
+        heapify(points,dist,0,s);
+    }
+    
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
+        
+        vector<vector<int>> points1;
+        vector<double> dist;
+        int s=0;
+        for(int i=0;i<points.size();i++)
+        {
+            
+            double d=sqrt(points[i][0]*points[i][0]+points[i][1]*points[i][1]);
+            insert(points1,dist,s,points[i],d);
+            if(s>k)
+                deleteheap(points1,dist,s);
+        }
+        
+        return points1;
+    }
+};
