@@ -1,0 +1,108 @@
+class Solution {
+public:
+    
+    
+    void swap(vector<vector<int>> &nums,int i,int j)
+    {
+        vector<int> temp=nums[i];
+        nums[i]=nums[j];
+        nums[j]=temp;
+    }
+    
+    void heapify(vector<vector<int>> &nums,int i,int s)
+    {
+        int left=i*2+1;
+        int right=i*2+2;
+        
+        int maxm;
+        
+        if(left<s && nums[left][1]>nums[i][1])
+            maxm=left;
+        else
+            maxm=i;
+        
+        if(right<s && nums[right][1]>nums[maxm][1])
+            maxm=right;
+        
+        if(i!=maxm)
+        {
+            swap(nums,maxm,i);
+            heapify(nums,maxm,s);
+        }
+    }
+    
+    int parent(int i)
+    {
+        if(i%2)
+            return i/2;
+        else
+            return (i-1)/2;
+    }
+    
+    void buildheap(vector<vector<int>> &nums,int s)
+    {
+        for(int i=s/2;i>-1;i--)
+            heapify(nums,i,s);
+    }
+    
+
+    
+    vector<int> deleteheap(vector<vector<int>> &nums,int &s)
+    {
+        s--;
+        vector<int> temp=nums[0];
+
+        swap(nums,0,s);
+        nums.pop_back();
+        // exit(0);
+        heapify(nums,0,s);
+        return temp;
+    }
+    
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int,vector<int>> m;
+        int s=nums.size();
+        
+        for(int i=0;i<s;i++)
+        {
+            if(m.find(nums[i])!=m.end())
+                (m[nums[i]][1])+=1;
+            else
+            {
+                vector<int> v;
+                v.push_back(nums[i]);
+                v.push_back(1);
+                m[nums[i]]=v;
+            }
+        }
+        
+        vector<vector<int>> ans;
+        
+        for(auto it=m.begin();it!=m.end();it++)
+        {
+            // cout<<it->second[0]<<" "<<it->second[1]<<" ";
+            ans.push_back(it->second);
+        }
+        
+        int s1=ans.size();
+        buildheap(ans,s1);
+        
+       
+        
+        vector<int> ans1;
+     
+        for(int i=0;i<k;i++)
+        {
+            vector<int> t=deleteheap(ans,s1);
+            // cout<<t[0]<<" ";
+            
+            ans1.push_back(t[0]);
+        }
+        return ans1;
+        
+        
+        
+        
+        
+    }
+};
