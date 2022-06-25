@@ -1,0 +1,63 @@
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        map<char,int> m;
+        int s=tasks.size();
+        int maxm=0;
+        char c;
+        for(int i=0;i<s;i++)
+        {
+            if(m.find(tasks[i])!=m.end())
+            {
+                m[tasks[i]]+=1;
+                if(m[tasks[i]]>maxm)
+                {
+                    maxm=m[tasks[i]];
+                    c=tasks[i];
+                }
+            }
+            else
+            {
+                m[tasks[i]]=1;
+                 if(m[tasks[i]]>maxm)
+                {
+                    maxm=m[tasks[i]];
+                    c=tasks[i];
+                }
+            }
+        }
+        
+        /*
+        First find the total time taken by the maximum frequent task
+        
+        suppose task A appears 5 times ans n=2 then the tasks cycles are
+        1 2 3 4 5 6 7 8 9 10 11 12 13
+        A X X A X X A X X A  X  X  A
+        
+        now find how many tasks will take same time and if they take same time then just increment total 
+        cycles by 1 as they will complete in one more cycle
+        
+        Now suppose if total cycles required by tasks other than A is greater than total idle cycles 
+        in between A's then the total time will be just the size of tasks array and this is beacuse
+        we will shift A's position to occupy the other tasks,in other words there will be some 
+        permutation of task array is possible that leads to valid CPU cycles.
+        
+        Ex [A,A,A,B,B,C,C,D,D,E,E,F,F],n=2
+        
+        in this case total idle cycles between A's is 4 but other tasks require 10 cycles so we 
+        can shift A's position as
+        
+        A B C D A B C D E F A E F
+        this is one valid combination
+        */
+        
+        int cycles=(maxm-1)*(n+1)+1;
+        
+        for(auto it=m.begin();it!=m.end();it++)
+        {
+            if(it->second==maxm && it->first!=c)
+                cycles++;
+        }
+        return max(cycles,s);
+    }
+};
