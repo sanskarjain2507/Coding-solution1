@@ -1,0 +1,220 @@
+ class dll{
+     public:
+         int key;
+         int value;
+         dll* prev;
+         dll* next;
+ };
+
+class LRUCache {
+public:
+   
+    unordered_map<int,dll*> m;
+    dll *head,*tail;
+    int s;
+    int i;
+    LRUCache(int capacity) {
+        head=NULL;
+        tail=NULL;
+        s=capacity;
+        i=0;
+    }
+     void printdll(dll* d1)
+    {
+        while(d1!=NULL)
+        {
+            cout<<d1->value<<" ";
+            d1=d1->next;
+        }
+        cout<<'\n';
+    }
+       void printdll1(dll* d1)
+    {
+           cout<<"t";
+        while(d1!=NULL)
+        {
+            cout<<d1->value<<" ";
+            d1=d1->prev;
+        }
+        cout<<'\n';
+    }
+    int get(int key) {
+        
+        
+        if(m.find(key)==m.end() || m[key]==NULL) //if key is not in cache then return -1
+        {
+            // printdll(head);
+            return -1;
+        }
+        else
+        {        
+            dll* d1=m[key];//store dll of key in d1
+            int t=d1->value; 
+            if(i>1) //if total keys are more than 1
+            {
+                if(d1==tail)// if key is tail
+                {
+                    tail=d1->prev; //update tail and prev of tail
+                    tail->next=NULL;
+                    d1->prev=NULL;//bring d1 to front 
+                    head->prev=d1; //update head
+                    d1->next=head;
+                    head=d1;
+                }
+                else if(d1!=head)//if d1 is not equal to head
+                {
+                    d1->prev->next=d1->next; //delete d1 from its current position
+                    d1->next->prev=d1->prev;
+                    d1->prev=NULL;//bring d1 to front 
+                    head->prev=d1; //update head
+                    d1->next=head;
+                    head=d1;
+                }
+               
+            }
+            // printdll(head);
+            // printdll1(tail);
+            return t;
+
+        }
+    }
+    
+   
+    void put(int key, int value) {
+        
+       
+        if(i==s) //if i==s means cahche is full
+        {
+            if(m.find(key)==m.end() || m[key]==NULL) //if key is not present
+            {
+                if(s==1) //if size of cache is 1 then just update head and tail
+                {
+                    dll* d1=new dll();
+                    d1->key=key;
+                    d1->value=value;
+                    d1->next=NULL;
+                    d1->prev=NULL;
+                    m[head->key]=NULL;
+                    head=d1;
+                    tail=d1;
+                    m[key]=d1;
+                   
+                }
+                else 
+                {
+                    m[tail->key]=NULL;
+                    tail=tail->prev;
+                    tail->next=NULL;
+                    dll *d1=new dll();
+                    d1->key=key;
+                    d1->value=value;
+                    d1->next=head;
+                    d1->prev=NULL;
+                    head->prev=d1;
+                    head=d1;
+                    m[key]=d1;
+                    
+                }
+            }
+            else
+            {
+               
+                dll* d1=m[key];
+                d1->value=value;
+                if(d1==tail)
+                {
+                    if(s>1)
+                    {
+                        tail=tail->prev;
+                        tail->next=NULL;
+                        head->prev=d1;
+                        d1->next=head;
+                        d1->prev=NULL;
+                        head=d1;
+                    }
+                }
+                else if(d1!=head)
+                {
+                    if(s>1)
+                    {
+                        d1->prev->next=d1->next;
+                        if(d1!=tail)
+                            d1->next->prev=d1->prev;
+                        head->prev=d1;
+                        d1->next=head;
+                        d1->prev=NULL;
+                        head=d1;
+                    }
+
+                }
+                
+                
+            }
+            
+        }
+        else
+        {
+            if(m.find(key)==m.end() || m[key]==NULL)
+            {
+                i++;
+                dll* d1=new dll();
+                
+                d1->key=key;
+                d1->value=value;
+                d1->next=head;
+                d1->prev=NULL;
+                if(head!=NULL)
+                {
+                    head->prev=d1;
+                    head=d1;
+                }
+                else
+                {
+                    head=d1;
+                    tail=d1;
+                }
+                m[key]=d1;
+                
+            }
+            else
+            {
+                dll* d1=m[key];
+                d1->value=value;
+                if(d1==tail)
+                {
+                    if(i>1)
+                    {
+                        tail=tail->prev;
+                        tail->next=NULL;
+                        head->prev=d1;
+                        d1->next=head;
+                        d1->prev=NULL;
+                        head=d1;
+                    }
+                }
+                else if(d1!=head)
+                {
+                    if(i>1)
+                    {
+                        d1->prev->next=d1->next;
+                        if(d1!=tail)
+                            d1->next->prev=d1->prev;
+                        head->prev=d1;
+                        d1->next=head;
+                        d1->prev=NULL;
+                        head=d1;
+                    }
+                    
+                }
+            }
+        }
+         // printdll(head);
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
