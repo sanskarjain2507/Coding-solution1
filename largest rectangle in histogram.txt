@@ -1,0 +1,70 @@
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        
+        
+        //find left minimum and rightminimum  and then find the maxm height for each histogram
+        stack<int> s1;
+        stack<int> s2;
+        int s=heights.size();
+        vector<int> rightsmall(s,-1);
+        s1.push(heights[s-1]);
+        s2.push(s-1);
+        rightsmall[s-1]=s;
+        for(int i=s-2;i>-1;i--)
+        {
+            while(!s1.empty() && heights[i]<=s1.top())
+            {
+                s1.pop();
+                s2.pop();
+            }
+            
+            if(s1.empty())
+                rightsmall[i]=s;
+            else
+                rightsmall[i]=s2.top();
+            s1.push(heights[i]);
+            s2.push(i);
+        }
+        
+        while(!s1.empty())
+        {     
+            s1.pop();
+            s2.pop();
+        }
+    
+ 
+       
+        vector<int> leftsmall(s,-1);
+        leftsmall[0]=-1;
+        s1.push(heights[0]);
+        s2.push(0);
+        for(int i=1;i<s;i++)
+        {
+            while(!s1.empty() && heights[i]<=s1.top())
+            {
+                s1.pop();
+                s2.pop();
+            }
+            
+            if(s1.empty())
+                leftsmall[i]=-1;
+            else
+                leftsmall[i]=s2.top();
+            s1.push(heights[i]);
+            s2.push(i);
+        }
+        
+        
+        int maxm=0;
+        
+        for(int i=0;i<s;i++)
+        {
+            maxm=max(maxm,(heights[i],heights[i]*(rightsmall[i]-leftsmall[i]-1)));
+        }
+        return maxm;
+        
+        
+        
+    }
+};
