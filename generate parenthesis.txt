@@ -1,0 +1,42 @@
+class Solution {
+public:
+    
+
+    
+    void genpar(vector<string> &ans,string &str,int s,int &s1,int &k1,int &k2)
+    {
+        if(s==s1)
+        {
+            
+            ans.push_back(str);
+            return;
+        }
+        
+        str+='(';
+        k1+=1;
+        if(k1<=(s1>>1) && k1>=k2)
+            genpar(ans,str,s+1,s1,k1,k2);
+        str.pop_back();
+        k1-=1;
+        str+=')';
+        k2+=1;
+        if(k2<=(s1>>1) && k2<=k1)
+            genpar(ans,str,s+1,s1,k1,k2);
+        k2-=1;
+        str.pop_back();
+    }
+    
+    vector<string> generateParenthesis(int n) {
+        
+        string str;
+        int s=0;
+        int k1=0;
+        int k2=0;
+        vector<string> ans;
+        int k=n<<1;
+        genpar(ans,str,s,k,k1,k2);
+        return ans;
+        
+        
+    }
+};
