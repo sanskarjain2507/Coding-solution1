@@ -1,0 +1,148 @@
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int t=0;
+        
+        int m=grid.size();
+        int n=grid[0].size();
+        queue<vector<int>> q1;
+        queue<vector<int>> q2;
+        int n1=0;
+        
+        for(int i=0;i<m;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                if(grid[i][j]==1)
+                    n1++;
+                else if(grid[i][j]==2)
+                {
+                    vector<int> v;
+                    v.push_back(i);
+                    v.push_back(j);
+                    q1.push(v);
+                }
+            }
+        }
+        
+        if(n1==0)
+            return 0;
+        // cout<<n1<<" "<<q1.size()<<" ";
+        
+        
+        while((!q1.empty()) || (!q2.empty()))
+        {
+            t+=1;
+            if(!q1.empty())
+            {
+                while(!q1.empty())
+                {
+                    vector<int> temp=q1.front();
+                    q1.pop();
+                    int i1=temp[0];
+                    int j1=temp[1];
+                    
+                    if(i1-1>-1 && grid[i1-1][j1]==1)
+                    {
+                        vector<int> v;
+                        v.push_back(i1-1);
+                        v.push_back(j1);
+                        q2.push(v);
+                        n1--;
+                        grid[i1-1][j1]=2;
+                    }
+
+                    if(i1+1<m && grid[i1+1][j1]==1)
+                    {
+                        vector<int> v;
+                        v.push_back(i1+1);
+                        v.push_back(j1);
+                        q2.push(v);
+                        grid[i1+1][j1]=2;
+                        n1--;
+                    }
+
+                    if(j1-1>-1 && grid[i1][j1-1]==1)
+                    {
+                        vector<int> v;
+                        v.push_back(i1);
+                        v.push_back(j1-1);
+                        q2.push(v);
+                        grid[i1][j1-1]=2;
+                        n1--;
+                    }
+
+                    if(j1+1<n && grid[i1][j1+1]==1)
+                    {
+                        vector<int> v;
+                        v.push_back(i1);
+                        v.push_back(j1+1);
+                        q2.push(v);
+                        grid[i1][j1+1]=2;
+                        n1--;
+                    }
+                }
+                
+            }
+            else
+            {
+                while(!q2.empty())
+                {
+                    vector<int> temp=q2.front();
+                    q2.pop();
+                    int i1=temp[0];
+                    int j1=temp[1];
+                    
+                    if(i1-1>-1 && grid[i1-1][j1]==1)
+                    {
+                        vector<int> v;
+                        v.push_back(i1-1);
+                        v.push_back(j1);
+                        q1.push(v);
+                        grid[i1-1][j1]=2;
+                        n1--;
+                    }
+
+                    if(i1+1<m && grid[i1+1][j1]==1)
+                    {
+                        vector<int> v;
+                        v.push_back(i1+1);
+                        v.push_back(j1);
+                        q1.push(v);
+                        grid[i1+1][j1]=2;
+                        n1--;
+                    }
+
+                    if(j1-1>-1 && grid[i1][j1-1]==1)
+                    {
+                        vector<int> v;
+                        v.push_back(i1);
+                        v.push_back(j1-1);
+                        q1.push(v);
+                        grid[i1][j1-1]=2;
+                        n1--;
+                    }
+
+                    if(j1+1<n && grid[i1][j1+1]==1)
+                    {
+                        vector<int> v;
+                        v.push_back(i1);
+                        v.push_back(j1+1);
+                        q1.push(v);
+                        grid[i1][j1+1]=2;
+                        n1--;
+                    }
+                }
+            }
+            // cout<<q1.size()<<" "<<q2.size()<<" \n";
+            
+            
+        }
+        
+        // cout<<n1<<" ";
+        if(n1==0)
+            return t-1;
+        else
+            return -1;
+    }
+};
