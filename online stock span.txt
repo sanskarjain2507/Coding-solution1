@@ -1,0 +1,57 @@
+class StockSpanner {
+public:
+    vector<int> stockprice;
+    vector<int> currentspan;
+  
+    int f;
+    int i;
+    stack<int> s;
+    stack<int> s1;
+    StockSpanner() {
+          f=0;  
+          
+    }
+    
+    int next(int price) {
+        if(s.empty())
+        {
+            s.push(price);
+            s1.push(f+1);
+            f=f+1;
+            return f;
+        }
+        else
+        {
+            int k=0;
+            f=1;
+            while(!s.empty() && s.top()<=price)
+            {
+                s.pop();
+                k+=1;
+                f+=s1.top();
+                s1.pop();
+            }
+            if(k>0)
+            {
+                s.push(price);
+                s1.push(f);
+            }
+            else
+            {
+                s.push(price);
+                s1.push(1);
+                f=1;
+            }
+    
+            return f;
+            
+        }
+     
+    }
+};
+
+/**
+ * Your StockSpanner object will be instantiated and called as such:
+ * StockSpanner* obj = new StockSpanner();
+ * int param_1 = obj->next(price);
+ */
