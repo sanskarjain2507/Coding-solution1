@@ -1,0 +1,180 @@
+
+class dll{
+    public:
+        int key;
+        int value;
+        dll* next;
+        dll*prev;
+};
+
+class LFUCache {
+public:
+    
+    unordered_map<int,dll*> heads; //it is mapping from freq to heads of that list
+    unordered_map<int,dll*> tails; //it is mapping from freq to tails of that list
+    unordered_map<int,dll*> data; //it stores mapping from key to pointer of dll storing that value
+    unordered_map<int,int> freq; //it is mapping from data to frequency
+    int s;
+    int c;
+    
+    
+    //this function just add dt to its corresponding list and update heads and tails,make sure you 
+    // update freq before calling this function
+    void add_to_list(dll* dt,unordered_map<int,dll*> &heads,unordered_map<int,dll*> &tails,unordered_map<int,dll*> &data,unordered_map<int,int> &freq)
+    {
+            int f=freq[dt->key];
+            
+        
+            if(heads.find(f)==heads.end())
+            {
+                heads[f]=dt;
+                tails[f]=dt;
+            }
+            else
+            {
+                dll* head=heads[f];
+                dll* tail=tails[f];
+                
+                if(head==NULL)
+                {
+                    heads[f]=dt;
+                    tails[f]=dt;
+                }
+                else
+                {
+                    
+                    dt->next=head;
+                    head->prev=dt;
+                    heads[f]=dt;
+                    
+                    
+                }
+            }
+    }
+    
+      //this function just remove dt to its corresponding list and update heads and tails,make sure you 
+    // update freq after calling this function
+    void remove_from_list(dll* dt,unordered_map<int,dll*> &heads,unordered_map<int,dll*> &tails,unordered_map<int,dll*> &data,unordered_map<int,int> &freq)
+    {
+        int f=freq[dt->key];
+        
+        dll* head=heads[f];
+        dll* tail=tails[f];
+        
+        if(head==tail)
+        {
+            heads[f]=NULL;
+            tails[f]=NULL;
+            
+            
+        }
+        else
+        {
+            if(dt==tail)
+            {
+                tail=tail->prev;
+                tail->next=NULL;
+                tails[f]=tail;
+                dt->prev=NULL;
+                    
+            }
+            else if(dt==head)
+            {
+                head=head->next;
+                head->prev=NULL;
+                heads[f]=head;
+                dt->next=NULL;
+            }
+            else
+            {
+                dt->prev->next=dt->next;
+                dt->next->prev=dt->prev;
+                dt->next=NULL;
+                dt->prev=NULL;
+            }
+            
+        }
+    }
+    
+    LFUCache(int capacity) {
+        c=capacity;
+        s=0;
+    }
+    
+    int get(int key) {
+        if(freq.find(key)==freq.end() || freq[key]==0)
+        {
+            return -1;
+        }
+        else
+        {
+            int f=freq[key];
+            dll* dt=data[key];
+            remove_from_list(dt,heads,tails,data,freq);
+            f+=1;
+            freq[key]=f;
+            add_to_list(dt,heads,tails,data,freq);
+            return data[key]->value;
+        
+        }
+    }
+    
+    void put(int key, int value) {
+        
+        if(c==0)
+            return;
+        if(data.find(key)==data.end() || data[key]==NULL)
+        {
+            dll* dt=new dll();
+            dt->key=key;
+            dt->value=value;
+            dt->next=NULL;
+            dt->prev=NULL;
+            data[key]=dt;
+            freq[key]=1;
+            
+            if(s<c)
+            {
+                s+=1;
+                add_to_list(dt,heads,tails,data,freq);
+            }
+            else
+            {
+                int i=1;
+                int k;
+                while(1)
+                {
+                    if(heads.find(i)!=heads.end() && heads[i]!=NULL)
+                    {
+                      k=i;
+                      break;
+                    }
+                    i++;
+                }
+                
+                dll* tail=tails[k];
+                remove_from_list(tail,heads,tails,data,freq);
+                freq[tail->key]=0;
+                data[tail->key]=NULL;
+                
+                add_to_list(dt,heads,tails,data,freq);
+            }
+            
+        }
+        else
+        {
+            dll* dt=data[key];
+            remove_from_list(dt,heads,tails,data,freq);
+            freq[dt->key]+=1;
+            dt->value=value;
+            add_to_list(dt,heads,tails,data,freq);
+        }
+    }
+};
+
+/**
+ * Your LFUCache object will be instantiated and called as such:
+ * LFUCache* obj = new LFUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
