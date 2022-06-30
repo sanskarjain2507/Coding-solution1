@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        deque<int> q;
+        vector<int> ans;
+        int s=nums.size();
+        for(int i=0;i<s;i++)
+        {
+            if(!q.empty() && q.front()==i-k) //if q.front() is outdated then remove it
+                q.pop_front();
+            
+            while(!q.empty() && nums[q.back()]<nums[i]) //now remove all elements from right to left of i that are smaller than i
+                q.pop_back();
+            
+            q.push_back(i); //now push i
+            if(i>=k-1) //you will find the greatest element in the front of queue always
+                ans.push_back(nums[q.front()]);
+        }
+        
+        //in short we are storing in deque in increasing fashion 
+        return ans;
+        
+    }
+};
