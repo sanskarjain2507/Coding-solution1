@@ -1,0 +1,64 @@
+/*
+	This is signature of helper function 'knows'.
+	You should not implement it, or speculate about its implementation.
+
+	bool knows(int A, int B); 
+	Function 'knows(A, B)' will returns "true" if the person having
+	id 'A' know the person having id 'B' in the party, "false" otherwise.
+*/
+#include<bits/stdc++.h>
+int findCelebrity(int n) {
+ 	stack<int> s;
+    
+    
+    //first put all the persons into stack
+    for(int i=0;i<n;i++)
+        s.push(i);
+    
+    //now eliminate the posiibilities of celebrities by putting at most one 
+    //guest among top two stack into stack who does not know other
+    
+    //this will work as there is at most one celebrity only and if celebrity is 
+    //present then everyone knows him so if knows(val1,val2)==1 it means val1 
+    //cannot be celebrity so check for knows (val2,val1).
+   
+    //If it is like knows(val2,val1)==0 && knows(val1,val2)==0 it means both of 
+    //them are not celbrity because if any one of them are celebrity then any       //one among knows(val1,val2) or nows(val2,val1) will be 1.Hence you can 
+    //push anyone and continue
+    while(s.size()>1)
+    {
+        int val1=s.top();
+        s.pop();
+
+        int val2=s.top();
+        s.pop();
+        
+        if(!knows(val1,val2))
+            s.push(val1);
+        else if(!knows(val2,val1))
+            s.push(val2);
+            
+       
+    }
+    
+    //if stack is empty then there is no celebrity
+    if(s.empty())
+        return -1;
+    
+    
+    int val=s.top();
+    //check if val knows anyone or not
+    for(int i=0;i<n;i++)
+    {
+        if(i!=val && knows(val,i))
+            return -1;
+    }
+    
+    //check if everyone knows val or not
+    for(int i=0;i<n;i++)
+    {
+        if(i!=val && !knows(i,val))
+            return -1;
+    }
+    return val;
+}
