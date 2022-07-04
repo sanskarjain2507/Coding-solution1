@@ -1,0 +1,47 @@
+class Solution {
+public:
+    string reverseWords(string s) {
+        
+        int l=s.length();
+        
+        string ans="";
+        string temp="";
+        
+        int i=l-1;
+        
+        
+        //remove spackes from end
+        while(s[i]==' ')
+            i--;
+        
+        int j=0;
+        //remove spaces from begining
+        while(s[j]==' ')
+            j++;
+        
+        for(;i>=j;i--)
+        {
+            if(s[i]==' ')
+            {
+                reverse(temp.begin(),temp.end());
+                ans+=temp;
+                ans+=" ";
+                temp="";
+                
+                //remove spaces from end
+                while(i-1>=j && s[i-1]==' ')
+                    i--;
+            }
+            else
+                temp+=s[i];
+        }
+        
+
+            
+            reverse(temp.begin(),temp.end());
+            ans+=temp;
+       
+        return ans;
+        
+    }
+};
