@@ -1,0 +1,115 @@
+class Solution {
+public:
+    
+    void findp(vector<vector<int>> &grid,int i,int j,int &count,int &x,int &m,int &n,long int &k,vector<vector<long int>> &visited,int &i1,int &j1)
+    {
+        
+        //if path is already visited then just update k and return
+        if(visited[i][j]!=0)
+        {
+            k=(k+visited[i][j]-1)%x;
+            
+            return;
+        }
+        
+        int b1=k;
+        if(i+1<m  && grid[i+1][j]>grid[i][j])
+        {
+            k++;
+            findp(grid,i+1,j,count,x,m,n,k,visited,i1,j1);  
+            
+        }
+        
+        //if there is path from right then update right
+        if(b1!=k)
+        {
+            visited[i+1][j]=k-b1;
+        }
+        int b2=k;
+        
+        if(i-1>-1 && grid[i-1][j]>grid[i][j])
+        {
+            k++;
+            findp(grid,i-1,j,count,x,m,n,k,visited,i1,j1);  
+            
+        }
+        
+        //if there is path from left then update left
+        if(b2!=k)
+        {
+            visited[i-1][j]=k-b2;
+            
+        }
+        
+        
+        
+        int b3=k;
+        //if there is path from bottom then update bottom
+        if(j+1<n && grid[i][j+1]>grid[i][j])
+        {
+            k++;
+            findp(grid,i,j+1,count,x,m,n,k,visited,i1,j1);   
+         
+        }
+        
+        if(b3!=k)
+        {
+            visited[i][j+1]=k-b3;
+        }
+        
+        
+        int b4=k;
+        if(j-1>-1  && grid[i][j-1]>grid[i][j])
+        {
+            k++;
+           
+            findp(grid,i,j-1,count,x,m,n,k,visited,i1,j1);
+          
+        }
+         
+        //if there is path from top then update top
+        if(b4!=k)
+        {
+            visited[i][j-1]=k-b4;
+        }
+        visited[i1][j1]=k;
+        if(i==i1 && j==j1)
+            count=(count+visited[i][j])%x;
+        
+    }
+    
+    int countPaths(vector<vector<int>>& grid) {
+        
+        int count=0;
+        int x=1000000007;
+        
+        int m=grid.size();
+        int n=grid[0].size();
+        
+        vector<vector<long int>> visited;
+        for(int i=0;i<m;i++)
+        {
+            vector<long int> temp(n,0);
+            visited.push_back(temp);
+        }
+        
+        long int k=1;
+        long int k2=1;
+        for(int i=0;i<m;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                k=1;
+                k2=1;
+                
+                if(visited[i][j]!=0)
+                     count=(count+visited[i][j])%x;
+                else
+                    findp(grid,i,j,count,x,m,n,k,visited,i,j);
+            }
+        }
+        
+        return count;
+        
+    }
+};
