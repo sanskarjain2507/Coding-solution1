@@ -1,0 +1,19 @@
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        sort(strs.begin(),strs.end());
+        
+        //the maximum difference is between the first and last string of sorted strs
+        int i=0;
+        int j=strs.size()-1;
+        
+        string ans="";
+        
+        while(strs[0][i] && strs[j][i] && strs[0][i]==strs[j][i])
+        {
+            ans+=strs[0][i];
+            i++;
+        }
+        return ans;
+    }
+};
