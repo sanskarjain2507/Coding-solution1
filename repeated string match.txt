@@ -1,0 +1,76 @@
+class Solution {
+public:
+    
+    int isequal(string s1,string s2,int start,int end)
+    {
+        
+        int i=0;
+        while(s1[i])
+        {
+            if(s1[i]!=s2[start])
+            {
+                
+                return 0;
+            }
+            i++;
+            start++;
+        }
+        return 1;
+    }
+    int repeatedStringMatch(string a, string b) {
+        
+        int l2=b.length();
+        unsigned long long int k=b[l2-1]-'a';
+        int x=1000000007;
+        
+        
+        unsigned long int h=26;
+        for(int i=l2-2;i>-1;i--)
+        {
+            k=k+h*(b[i]-'a');
+            h=h*26;
+        }
+       
+        h=h/26;
+        int l1=a.length();
+        int l=0;
+        
+        string s1="";
+        
+        while(l<2*l2)
+        {
+            s1+=a;
+            l+=l1;
+        }
+        s1+=a;
+        l+=l1;
+       
+        unsigned  long long int h1=26;
+        unsigned long long int k1=s1[l2-1]-'a';
+        
+        for(int i=l2-2;i>-1;i--)
+        {
+            k1=k1+h1*(s1[i]-'a');
+            h1=h1*26;
+        }
+        
+        // cout<<k1<<" "<<k<<" \n";
+        if(k1==k && isequal(b,s1,0,l2-1))
+        {
+            return ceil(l2/(l1*1.0));
+        }
+      
+        for(int i=1;i+l2-1<l;i++)
+        {
+            
+            k1=k1-((s1[i-1]-'a')*h);
+            k1=k1*26;
+            k1=k1+s1[i+l2-1]-'a';
+            if(k1==k  && isequal(b,s1,i,i+l2-1))
+                    return ceil((i+l2)/(l1*1.0));
+        }
+        return -1;
+                        
+        
+    }
+};
