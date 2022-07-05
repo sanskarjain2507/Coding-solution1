@@ -1,0 +1,41 @@
+class Solution {
+public:
+    unordered_map<int,string> m;
+    string countAndSay(int n) {
+        
+        if(n==1)
+            return "1";
+        
+        if(m.find(n)!=m.end())
+            return m[n];
+        string ans="";
+        
+        ans=countAndSay(n-1);
+        
+        int l=ans.length();
+        
+        int c=1;
+        int i=0;
+        string ans1="";
+        while(1)
+        {
+            // cout<<n<<" ";
+            while(i+1<l && ans[i]==ans[i+1])
+            {
+                c++;
+                i++;
+            }
+            ans1+=to_string(c);
+            ans1+=ans[i];
+            
+            
+            if(i+1>=l)
+                break;
+            i++;
+            c=1;
+        }
+        m[n]=ans1;
+        return ans1;
+        
+    }
+};
