@@ -1,0 +1,72 @@
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        
+        //take the charecters one by one and then check for palindrome and similarly do for even lengths 
+        int l=s.length();
+        int maxm=0;
+        int pos=0;
+        for(int i=0;i<l;i++)
+        {
+            int j=i;
+            int k=1;
+            int c=1;
+            
+            while(j-k>-1 && j+k<l && s[j-k]==s[j+k])
+            {
+                c+=2;
+                k++;
+            }
+            
+            if(c>maxm)
+            {
+                maxm=c;
+                pos=i;
+            }
+            
+        }
+        
+         
+        for(int i=0;i<l;i++)
+        {
+            int j=i;
+            int j1=j+1;
+            if(s[j]==s[j+1])
+            {
+                int k=1;
+                int c=2;
+
+                while(j-k>-1 && j1+k<l && s[j-k]==s[j1+k])
+                {
+                    c+=2;
+                    k++;
+                }
+
+                if(c>maxm)
+                {
+                    maxm=c;
+                    pos=i;
+                }
+            }
+            
+        }
+        string ans="";
+       
+        if(maxm%2)
+        {
+            int c1=pos-maxm/2;
+            int c2=pos+maxm/2+1;
+            for(int i=c1;i<c2;i++)
+                ans+=s[i];
+        }
+        else
+        {
+            int c1=pos-maxm/2+1;
+            int c2=pos+maxm/2+1;
+            for(int i=c1;i<c2;i++)
+                ans+=s[i];   
+        }
+        return ans;
+        
+    }
+};
