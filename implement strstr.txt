@@ -1,0 +1,67 @@
+class Solution {
+public:
+    
+    int isequal(string s2,string s1,int start)
+    {
+        int i=0;
+        while(s1[i])
+        {
+            if(s1[i]!=s2[start])
+                return 0;
+            i++;
+            start++;
+        }
+        return 1;
+        
+    }
+    int strStr(string haystack, string needle) {
+        
+       
+        //just apply rabin carp
+        int l1=haystack.length();
+        int l2=needle.length();
+        
+        if(l1<l2)
+            return -1;
+        
+        if(l2==0)
+            return 0;
+         
+        unsigned long long int k1=needle[l2-1]-'a';
+        unsigned long long int h1=26;
+        
+        for(int i=l2-2;i>-1;i--)
+        {
+            k1=k1+(h1*(needle[i]-'a'));
+            h1*=26;
+        }
+        
+        unsigned long long int k2=haystack[l2-1]-'a';
+        
+        h1=26;
+        for(int i=l2-2;i>-1;i--)
+        {
+            k2=k2+(h1*(haystack[i]-'a'));
+            h1*=26;
+        }
+        
+     
+        h1=h1/26;
+        if(k1==k2 && isequal(haystack,needle,0))
+            return 0;
+        
+        for(int i=1;i+l2-1<l1;i++)
+        {
+            
+            k2=k2-(haystack[i-1]-'a')*h1;
+           
+            k2*=26;
+            k2=k2+haystack[i+l2-1]-'a';
+            
+            if(k1==k2 && isequal(haystack,needle,i))
+                return i;
+        }
+        return -1;
+        
+    }
+};
