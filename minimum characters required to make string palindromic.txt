@@ -1,0 +1,53 @@
+
+void calculateKMP(string &s,vector<int> &KMP)
+{
+    int l=s.length();
+    //just append the reverse of string and calculte LPS through KMP 
+    int i=1;
+    int l1=0;
+    while(i<l)
+    {
+        if(s[i]==s[l1])
+        {
+            l1++;
+            KMP[i]=l1;
+            
+            
+            i++;
+        }
+        else if(l1==0)
+        {
+            if(s[i]==s[0])
+            {
+                KMP[i]=1;
+                l1=1;
+                i++;
+            }
+            else
+            {
+                i++;   
+            }
+        }
+        else
+        {
+            l1--;
+        }
+    }
+}
+
+int Solution::solve(string A) {
+    int l=A.length();
+    vector<int> KMP(2*l,0);
+   
+   string s1="";
+   for(int i=l-1;i>-1;i--)
+    s1+=A[i];
+    
+    A+=s1;
+
+    calculateKMP(A,KMP);
+    // cout<<A<<" ";
+    // for(int i=0;i<2*l;i++)
+    //     cout<<KMP[i]<<" ";
+    return max(0,l-KMP[2*l-1]);
+}
