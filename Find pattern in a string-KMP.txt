@@ -1,0 +1,68 @@
+#include<bits/stdc++.h>
+
+void calculateKMP(string &s,vector<int> &KMP)
+{
+    int l=s.length();
+    int l1=0;
+    char ch=s[0];
+    
+    KMP[0]=-1;
+    int i=1;
+   while(i<l)
+    {
+        if(ch==s[i]) 
+        {
+            KMP[i]=l1;
+            l1++;
+            i++;
+            ch=s[l1];
+        }
+        else if(KMP[l1]==-1)
+        {
+            if(s[0]==s[i])
+            {
+                KMP[i]=0;
+                l1=1;
+                ch=s[l1];
+                i++;
+            }
+            else
+            {
+                 l1=0;
+                 ch=s[l1];
+                 i++;
+            }
+        }
+        else
+        {
+            l1--;
+            ch=s[l1];
+        }
+    }    
+}
+
+bool findPattern(string p, string s)
+{
+    int l=p.length();
+    vector<int> KMP(l,-1);
+    calculateKMP(p,KMP);
+    int l1=s.length();
+    int j=-1;
+    for(int i=0;i<l1;)
+    {
+        if(s[i]==p[j+1])
+        {
+           i++;
+           j++;
+        }
+        else if(j==-1)
+               i++;
+        else
+            j=KMP[j];
+        if(j==l-1)
+            return 1;
+    }
+    return 0;
+
+    
+}
