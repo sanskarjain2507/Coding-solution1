@@ -1,0 +1,68 @@
+// { Driver Code Starts
+#include<bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+class Solution{
+    
+    public:
+    int transfigure (string A, string B)
+    {
+    	int l1=A.length();
+    	int l2=B.length();
+    	
+    	if(l1!=l2)
+    	    return -1;
+    	
+        vector<int> flag(256,0);
+        
+        for(int i=0;i<l2;i++)
+        {
+            flag[B[i]]+=1;
+        }
+        
+        for(int i=0;i<l1;i++)
+        {
+            flag[A[i]]-=1;
+            
+            if(flag[A[i]]<0)
+                return -1;
+            
+        }
+        
+        int i=l1-1;
+        int j=i;
+        int ans=0;
+        while(i>=0)
+        {
+            if(A[i]!=B[j])
+            {
+                ans+=1;
+                i--;
+            }
+            else
+            {
+                i--;
+                j--;
+            }
+            
+        
+        }
+        return ans;
+    }
+};
+
+// { Driver Code Starts.
+
+
+int main () 
+{
+    int t; cin >> t;
+    while (t--)
+    {
+        string A, B; 
+        cin >> A >> B;
+        Solution obj;
+        cout << obj.transfigure (A, B) << endl;
+    }
+}  // } Driver Code Ends
