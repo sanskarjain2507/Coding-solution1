@@ -1,0 +1,55 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    
+    void findinorder(TreeNode* root,vector<int> &ans)
+    {
+        if(root->left!=NULL)
+            findinorder(root->left,ans);
+        ans.push_back(root->val);
+        
+        if(root->right!=NULL)
+            findinorder(root->right,ans);
+    }
+    
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> ans;
+        
+        if(root==NULL)
+            return ans;
+        
+        // findinorder(root,ans);//recursive approach
+        
+        
+        //below is the loop approach
+        stack<TreeNode*> st;
+        
+        while(root || !st.empty())
+        {
+           while(root!=NULL) //first push all the left nodes to stack
+           {
+               
+               st.push(root);
+               root=root->left;
+           }
+            
+            root=st.top(); //now root will contain the leftmost node of the branch
+            st.pop();  //now pop it from stack 
+            ans.push_back(root->val); //add its val to stack
+            root=root->right; //now traverse its right subtree in same manner
+            
+        }
+        
+        return ans;
+    }
+};
