@@ -1,0 +1,135 @@
+/************************************************************
+
+    Following is the Binary Tree node structure:
+    
+    template <typename T>
+    class TreeNode {
+        public :
+        T data;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+
+        ~TreeNode() {
+            if(left)
+                delete left;
+            if(right)
+                delete right;
+        }
+    };
+
+
+************************************************************/
+#include<bits/stdc++.h>
+int f=0;
+
+void preorder(TreeNode<int>* root,vector<int> &ans,TreeNode<int>* left,TreeNode<int>* right)
+{
+    if(f==2)
+        return;
+    if(f==1)
+    {
+        
+        if(root==right)
+        {
+            f=2;
+            return;
+        }
+
+        if(root->left==NULL && root->right==NULL)
+        {
+            ans.push_back(root->data);
+            return;
+        }
+
+        if(root->left!=NULL)
+            preorder(root->left,ans,left,right);
+        
+
+        
+        if(root->right!=NULL)
+            preorder(root->right,ans,left,right);
+    }
+    
+    if(f==0)
+    {
+        if(root==left)
+        {
+            f=1;
+        }
+        
+        if(root->left!=NULL)
+            preorder(root->left,ans,left,right);
+        
+
+        if(root->right!=NULL)
+            preorder(root->right,ans,left,right);
+    }
+}
+vector<int> traverseBoundary(TreeNode<int>* root){
+    
+    //first traverse the leftodes and then rightnodes and then leafnodes between these two 
+    vector<int> rights;
+    
+    TreeNode<int>* left;
+    TreeNode<int>* right;
+    
+    vector<int> ans;
+    if(root==NULL)
+        return ans;
+    
+    TreeNode<int>* r1=root;
+    
+    if(r1->left==NULL)
+        left=r1;
+    ans.push_back(r1->data);
+    r1=r1->left;
+    while(r1!=NULL)
+    {
+        ans.push_back(r1->data);
+        
+        if(r1->left==NULL && r1->right==NULL)
+            left=r1;
+            
+        if(r1->left!=NULL)
+            r1=r1->left;
+        else
+            r1=r1->right;
+        
+    }
+    r1=root;
+    
+    if(r1->right==NULL)
+        right=r1;
+   
+    r1=r1->right;
+    
+    while(r1!=NULL)
+    {
+        rights.push_back(r1->data);
+        
+        if(r1->left==NULL && r1->right==NULL)
+            right=r1;
+            
+        if(r1->right!=NULL)
+            r1=r1->right;
+        else
+            r1=r1->left;
+        
+    }
+    reverse(rights.begin(),rights.end());
+    f=0;
+    preorder(root,ans,left,right);
+    
+    for(int i=0;i<rights.size();i++)
+    {
+        ans.push_back(rights[i]);
+    }
+    return ans;
+    
+}

@@ -1,0 +1,87 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        deque<pair<TreeNode*,int>> dq;
+    int f=1;
+    int h=0;
+    vector<vector<int>> ans;
+    if(root==NULL)
+        return ans;
+    
+    vector<int> temp;
+        
+    dq.push_back(make_pair(root,0));
+    
+    while(!dq.empty())
+    {
+        if(f)
+        {
+            pair<TreeNode*,int> p=dq.front();
+            
+            if(p.second!=h)
+            {
+                h++;
+                f=!f;
+                ans.push_back(temp);
+                temp.clear();
+                continue;
+            }
+            dq.pop_front();
+            
+            if(p.first->left!=NULL)
+            {
+                dq.push_back(make_pair(p.first->left,p.second+1));
+            }
+            
+            if(p.first->right!=NULL)
+            {
+                dq.push_back(make_pair(p.first->right,p.second+1));
+            }
+            
+            temp.push_back(p.first->val);
+            
+        }
+        else
+        {
+            pair<TreeNode*,int> p=dq.back();
+            
+            if(p.second!=h)
+            {
+                h++;
+                f=!f;
+                ans.push_back(temp);
+                temp.clear();
+                continue;
+            }
+            dq.pop_back();
+            
+            if(p.first->right!=NULL)
+            {
+                dq.push_front(make_pair(p.first->right,p.second+1));
+            }
+            
+            if(p.first->left!=NULL)
+            {
+                dq.push_front(make_pair(p.first->left,p.second+1));
+            }
+            
+           
+            
+            temp.push_back(p.first->val);
+        }
+    }
+    ans.push_back(temp);
+    return ans;
+    }
+};

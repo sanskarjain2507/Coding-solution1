@@ -1,0 +1,121 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int maxh;
+    int minh;
+    int maxl;
+    void findw(TreeNode* root,map<pair<int,int>,vector<long int>> &vals,int h,int v1,long int i,unordered_map<int,int> &m)
+    {
+       
+        if(m.find(v1)==m.end())
+            m[v1]=i;
+        
+        if(vals.find(make_pair(h,v1))==vals.end())
+        {
+            vector<long int> temp;
+            temp.push_back(i);
+            vals[make_pair(h,v1)]=temp;
+        }
+        else
+        {
+           vals[make_pair(h,v1)].push_back(i);
+        }
+        
+       
+       
+        
+       
+         
+        if(root->left!=NULL)
+        {
+            if(h-1<minh)
+                minh=h-1;
+            if(v1+1>maxl)
+                maxl=v1+1;
+            findw(root->left,vals,h-1,v1+1,(i-m[v1])*2+1,m);
+        }
+        
+        if(root->right!=NULL)
+        {
+            if(h+1>maxh)
+                maxh=h+1;
+            if(v1+1>maxl)
+                maxl=v1+1;
+            findw(root->right,vals,h+1,v1+1,(i-m[v1])*2+2,m);
+        }
+        
+        
+        
+    }
+    
+    
+    int widthOfBinaryTree(TreeNode* root) {
+        map<pair<int,int>,vector<long int>> vals;
+        unordered_map<int,int> m;
+        maxh=0;
+        minh=0;
+        maxl=0;
+        findw(root,vals,0,0,1,m);
+        
+        // for(auto it=vals.begin();it!=vals.end();it++)
+        // {
+        //     cout<<it->first.first<<" "<<it->first.second<<" ";
+        //     for(int i=0;i<it->second.size();i++)
+        //         cout<<it->second[i]<<" ";
+        //     cout<<"\n";
+        // }
+        
+        //https://youtu.be/ZbybYvcVLks 
+        
+        long int maxw=0;
+        
+        for(int i=0;i<=maxl;i++)
+        {
+            long int i1=INT_MAX;
+            vector<long int> temp;
+            for(int j=minh;j<=maxh;j++)
+            {
+                if(vals.find(make_pair(j,i))!=vals.end())
+                {
+                    temp=vals[make_pair(j,i)];
+                     // sort(temp.begin(),temp.end());
+                     i1=min(i1,temp[0]);
+                    // break;
+                }
+            }
+           
+            
+            
+            long int i2=0; 
+            for(int j=maxh;j>=minh;j--)
+            {
+                if(vals.find(make_pair(j,i))!=vals.end())
+                {
+                    temp=vals[make_pair(j,i)];
+                    // sort(temp.begin(),temp.end());
+                    i2=max(i2,temp[temp.size()-1]);
+                    // break;
+                }
+            }
+           
+            
+           
+            long int wid=(i2-i1)+1;
+           
+            if(maxw<wid)
+                maxw=wid;
+        }
+        return maxw;
+        
+    }
+};

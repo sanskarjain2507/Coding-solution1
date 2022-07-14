@@ -1,0 +1,85 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    
+    void findver(TreeNode* root,map<pair<int,int>,vector<int>> &vals,int &minm,int &maxm,int h,int vh,int &maxh)
+    {
+        
+//         pair<int,int> temp;
+//         temp.first=h;
+//         temp.second=vh;
+        
+        if(vals.find(make_pair(h,vh))!=vals.end())
+        {   
+            vals[make_pair(h,vh)].push_back(root->val);
+        }
+        else
+        {
+            vector<int> temp;
+            temp.push_back(root->val);
+            vals[make_pair(h,vh)]=temp;
+        }
+        
+        if(root->left!=NULL)
+        {
+            if(h-1<minm)
+                minm=h-1;
+            if(vh+1>maxh)
+                maxh=vh+1;
+            findver(root->left,vals,minm,maxm,h-1,vh+1,maxh);
+        }
+        
+        if(root->right!=NULL)
+        {
+            if(h+1>maxm)
+                maxm=h+1;
+            if(vh+1>maxh)
+                maxh=vh+1;
+            findver(root->right,vals,minm,maxm,h+1,vh+1,maxh);
+        }
+    }
+    
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+     
+        map<pair<int,int>,vector<int>> vals;
+        int minm=0;
+        int maxm=0;
+        int maxh=0;
+        vector<vector<int>> ans;
+        
+        if(root==NULL)
+            return ans;
+        findver(root,vals,minm,maxm,0,0,maxh);
+        
+        for(int i=minm;i<=maxm;i++)
+        {
+            vector<int> temp;
+            for(int j=0;j<=maxh;j++)
+            {
+                if(vals.find(make_pair(i,j))!=vals.end())
+                {
+                    vector<int> t=vals[make_pair(i,j)];
+                    sort(t.begin(),t.end());
+                    
+                    for(int k=0;k<t.size();k++)
+                        temp.push_back(t[k]);
+                }
+                
+            }
+             ans.push_back(temp);
+        }
+        return ans;
+        
+        
+    }
+};
