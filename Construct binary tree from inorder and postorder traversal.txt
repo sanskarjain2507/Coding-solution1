@@ -15,6 +15,8 @@ public:
     
     TreeNode* findT(vector<int>& postorder,vector<int>& inorder,int left,int right,unordered_map<int,int> &post_m,unordered_map<int,int> &ino_m)
     {
+
+//more optimal solution is also available see in discuss
         if(left>right)
             return NULL;
  
