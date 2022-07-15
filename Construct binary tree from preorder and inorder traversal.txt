@@ -1,0 +1,62 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    
+    TreeNode* findT(vector<int>& preorder,vector<int>& inorder,int left,int right,unordered_map<int,int> &pre_m,unordered_map<int,int> &ino_m)
+    {
+        if(left>right)
+            return NULL;
+ 
+            
+        int r=INT_MAX;
+        for(int j=left;j<=right;j++)
+        {
+            if(pre_m[inorder[j]]<r)
+            {
+                r=pre_m[inorder[j]];
+
+            }
+        }
+        int j=ino_m[preorder[r]];
+        TreeNode* root=new TreeNode();
+        root->val=preorder[r];
+        root->left=findT(preorder,inorder,left,j-1,pre_m,ino_m);
+        root->right=findT(preorder,inorder,j+1,right,pre_m,ino_m);
+        return root;
+ 
+    }
+    
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        TreeNode* root=new TreeNode();
+        unordered_map<int,int> pre_m;
+        unordered_map<int,int> ino_m;
+        
+        for(int i=0;i<preorder.size();i++)
+        {
+            pre_m[preorder[i]]=i;
+            ino_m[inorder[i]]=i;
+        }
+        
+        root->val=preorder[0];
+      
+        int r=ino_m[root->val];
+        
+        root->left=findT(preorder,inorder,0,r-1,pre_m,ino_m);
+        root->right=findT(preorder,inorder,r+1,inorder.size()-1,pre_m,ino_m);
+        
+        return root;
+        
+        
+       
+    }
+};
