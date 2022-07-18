@@ -1,0 +1,54 @@
+/************************************************************
+    Following is the Binary Search Tree node structure
+    
+    template <typename T>
+    class TreeNode {
+        public :
+        T data;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+
+        ~TreeNode() {
+            if(left)
+                delete left;
+            if(right)
+                delete right;
+        }
+    };
+
+************************************************************/
+int ans;
+void revinorder(TreeNode<int>* root,int &i,int &k)
+{
+    if(root==NULL)
+        return;
+
+    revinorder(root->right,i,k);
+
+    i++;
+
+    if(i==k)
+    {
+
+        ans=root->data;
+    }
+
+    if(ans!=-1)
+        return;
+    revinorder(root->left,i,k);
+}
+
+int KthLargestNumber(TreeNode<int>* root, int k) 
+{
+    ans=-1;
+    int i=0;
+    revinorder(root,i,k);
+    return ans;
+    // Write your code here.
+}
