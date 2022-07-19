@@ -1,0 +1,35 @@
+vector<int> Solution::dNums(vector<int> &A, int B) {
+    map<int,int> m;
+    
+    queue<int> q;
+    int c=0;
+    int i1=0;
+    
+    vector<int> ans;
+    for(int i=0;i<A.size();i++)
+    {
+        if(i-i1==B)
+        {
+            int j=q.front();
+            q.pop();
+            m[j]--;
+            if(m[j]==0)
+                c--;
+            i1++;
+        }
+        
+        q.push(A[i]);
+        
+        if(m.find(A[i])==m.end())
+            m[A[i]]=1;
+        else
+            m[A[i]]+=1;
+        
+        if(m[A[i]]==1)
+            c++;
+        if(i+1>=B)
+            ans.push_back(c);
+        
+    }
+    return ans;
+}
