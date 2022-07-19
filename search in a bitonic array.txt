@@ -1,0 +1,55 @@
+
+int findB(vector<int> &A,int k,int i,int j)
+{
+    if(i>j)
+        return -1;
+    
+    int mid=(i+j)/2;
+    
+    if(A[mid]==k)
+        return mid;
+    
+    if(mid==A.size())
+        return -1;
+    
+    if(mid==0)
+    {
+        if(A.size()>1)
+        {
+            if(A[1]!=k)
+                return -1;
+            else
+                return 1;
+        }
+        else 
+            return -1;
+        
+    }
+    
+    //if the array is on increasing side
+    if(A[mid-1]<A[mid] && A[mid]<A[mid+1])
+    {
+        if(A[mid]<k)
+            return findB(A,k,mid+1,j);
+        else
+            return max(findB(A,k,i,mid-1),findB(A,k,mid+1,j));   
+    } 
+    
+    
+    //if array is on decreasing side
+    if(A[mid-1]>A[mid] && A[mid+1]<A[mid])
+    {
+        if(A[mid]<k)
+            return findB(A,k,i,mid-1);
+        else
+            return max(findB(A,k,i,mid-1),findB(A,k,mid+1,j));
+            
+    }
+   
+   return max(findB(A,k,i,mid-1),findB(A,k,mid+1,j));
+}
+
+int Solution::solve(vector<int> &A, int B) {
+    
+    return findB(A,B,0,A.size()-1);
+}
