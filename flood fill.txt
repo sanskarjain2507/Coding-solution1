@@ -1,0 +1,52 @@
+class Solution {
+public:
+    
+    void ff(vector<vector<int>>& image, int sr, int sc, int color,int &r,int &c,vector<vector<int>> &visited,int &k)
+    {
+        if(image[sr][sc]!=k || visited[sr][sc])
+            return;
+       
+        image[sr][sc]=color;
+        
+        visited[sr][sc]=1;
+        
+        if(sr+1<r)
+        {
+            ff(image,sr+1,sc,color,r,c,visited,k);
+        }
+        
+        if(sr-1>-1)
+        {
+             ff(image,sr-1,sc,color,r,c,visited,k);
+        }
+        
+        if(sc+1<c)
+        {
+             ff(image,sr,sc+1,color,r,c,visited,k);
+        }
+        
+        if(sc-1>-1)
+        {
+             ff(image,sr,sc-1,color,r,c,visited,k);
+        }
+    }
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
+        
+         
+        int r=image.size();
+        int c=image[0].size();
+        
+        
+        int k=image[sr][sc];
+        vector<vector<int>> visited;
+        
+        for(int i=0;i<r;i++)
+        {
+            vector<int> temp(c,0);
+            visited.push_back(temp);
+        }
+        ff(image,sr,sc,color,r,c,visited,k);
+        return image;
+        
+    }
+};
