@@ -1,0 +1,88 @@
+//{ Driver Code Starts
+//Initial template for C++
+
+#include<bits/stdc++.h> 
+using namespace std; 
+
+// } Driver Code Ends
+//User function template for C++
+
+class Solution{   
+public:
+
+    bool issum(vector<int> &Arr,int sum,int n,vector<vector<int>> &t)
+    {
+        if(t[sum][n]!=-1)
+            return t[sum][n];
+        if(sum==0)
+            return 1;
+            
+        if(n==0)
+            return 0;
+        
+        if(sum-Arr[n-1]>=0)
+        {
+            t[sum][n]=issum(Arr,sum-Arr[n-1],n-1,t) || issum(Arr,sum,n-1,t);
+        }
+        else
+            t[sum][n]=issum(Arr,sum,n-1,t);
+        return t[sum][n];
+        
+    }
+    bool isSubsetSum(vector<int>arr, int sum){
+        int n=arr.size();
+        vector<vector<int>> t;
+        for(int i=0;i<sum+1;i++)
+        {
+            vector<int> temp(n+1,-1);
+            t.push_back(temp);
+        }
+        
+        for(int i=0;i<sum+1;i++)
+        {
+            t[i][0]=0;
+        }
+        
+        for(int j=0;j<n+1;j++)
+            t[0][j]=1;
+            
+        for(int i=1;i<sum+1;i++)
+        {
+            for(int j=1;j<n+1;j++)
+            {
+                if(i-arr[j-1]>=0)
+                    t[i][j]=t[i-arr[j-1]][j-1] || t[i][j-1];
+                else
+                    t[i][j]=t[i][j-1];
+            }
+        }
+        return t[sum][n]; 
+        //above code is pure top-down
+        
+        //below is DP with recurssion
+        return issum(arr,sum,n,t);
+    }
+};
+
+//{ Driver Code Starts.
+int main() 
+{ 
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        int N, sum;
+        cin >> N;
+        vector<int> arr(N);
+        for(int i = 0; i < N; i++){
+            cin >> arr[i];
+        }
+        cin >> sum;
+        
+        Solution ob;
+        cout << ob.isSubsetSum(arr, sum) << endl;
+    }
+    return 0; 
+} 
+
+// } Driver Code Ends
