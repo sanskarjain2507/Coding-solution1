@@ -1,0 +1,64 @@
+class Solution {
+public:
+    
+    int countsubset(vector<int> &nums,int n,int d,vector<vector<int>> &t)
+    {
+
+        
+         if(d==0)
+            return 1;
+        
+        if(n==0)
+            return 0;
+        
+       
+        
+        if(t[n][d]!=-1)
+            return t[n][d];
+        
+        if(d-nums[n-1]>=0)
+        {
+            t[n][d]=countsubset(nums,n-1,d-nums[n-1],t)+countsubset(nums,n-1,d,t);
+        }
+        else
+            t[n][d]=countsubset(nums,n-1,d,t);
+        return t[n][d];
+    }
+    
+    int findTargetSumWays(vector<int>& nums, int target) {
+        int sum=0;
+        int f=0;
+        for(int i=0;i<nums.size();i++)
+        {
+            if(nums[i]==0)
+                f+=1;
+            sum+=nums[i];
+        }
+        
+        if((sum+target)%2)
+            return 0;
+        int d=(sum+target)/2;
+        
+        if(d<0)
+            return 0;
+       
+        vector<vector<int>> t;
+        int n=nums.size();
+        for(int i=0;i<n+1;i++)
+        {
+            vector<int> temp(d+1,-1);
+            t.push_back(temp);
+        }
+       
+        sort(nums.begin(),nums.end(),greater<int>());
+        countsubset(nums,n,d,t);
+        
+        if(d==0 && f!=0)
+        {
+            return pow(2,f);
+        }
+        else
+            return abs(t[n][d]);
+      
+    }
+};
