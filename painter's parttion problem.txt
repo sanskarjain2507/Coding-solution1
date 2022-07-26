@@ -1,0 +1,57 @@
+bool canpaint(int &A,int &B,vector<int> &C,unsigned long long int &t)
+{
+    unsigned long long int mod=10000003;
+    int c=1;
+    unsigned long long int k=0;
+    for(int i=0;i<C.size();)
+    {
+        if(C[i]+k<=t)
+        {
+            k+=C[i];
+            i++;
+        }
+        else
+        {
+            c++;
+            k=0;
+            if(c>A)
+                return 0;
+        }
+        
+    }   
+    return 1;
+}
+
+int Solution::paint(int A, int B, vector<int> &C) {
+    unsigned long long int mod=10000003;
+    int m=B;
+    B=1;
+    
+    unsigned long long int low=1;
+    
+    unsigned long long int high=0;
+    
+    for(int i=0;i<C.size();i++)
+    {
+        high=high+C[i];
+    }
+    // cout<<low<<" "<<high<<" ";
+    unsigned  long long int ans=high;
+    while(low<=high)
+    {
+        
+        unsigned long long int mid=(low+high)/2;
+        // cout<<low<<" "<<high<<" "<<mid<<" ";
+        if(canpaint(A,B,C,mid))
+        {
+            ans=mid;
+            high=mid-1;
+        }
+        else
+            low=mid+1;
+    }
+    
+    // cout<<low;
+    return (ans*m)%mod;
+    
+}
